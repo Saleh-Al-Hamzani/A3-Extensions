@@ -6,12 +6,10 @@
 <title>A3 Extensions · Directory</title>
 <style>
   :root {
-    /* --- ART FROM YOUR SNIPPET --- */
     --bg-dark: #020617;
     --bg-gradient: radial-gradient(circle at top, #1f2937 0, #020617 55%, #020617 100%);
     --card-bg: radial-gradient(circle at top left, rgba(30, 41, 59, 0.4), rgba(15,23,42, 0.6));
-    --primary: #0ea5e9; /* Cyan Blue */
-    --primary-soft: rgba(56, 189, 248, 0.1);
+    --primary: #0ea5e9;
     --border: rgba(148, 163, 184, 0.2);
     --text-main: #e5e7eb;
     --text-muted: #9ca3af;
@@ -31,7 +29,7 @@
     justify-content: center;
   }
 
-  /* Responsive Container (Wide on Desktop, Phone-like on Mobile) */
+  /* Container */
   .container {
     width: 90%; 
     max-width: 1400px;
@@ -46,7 +44,7 @@
     min-height: 80vh;
   }
 
-  /* --- HEADER ART --- */
+  /* Header */
   header {
     display: flex;
     align-items: center;
@@ -80,22 +78,15 @@
     margin: 0 0 2px 0;
   }
 
-  .titles p {
-    font-size: 12px;
-    color: var(--text-muted);
-    margin: 0;
-  }
+  .titles p { font-size: 12px; color: var(--text-muted); margin: 0; }
 
-  /* --- SEARCH BAR ART --- */
-  .search-wrap {
-    position: relative;
-    margin-bottom: 20px;
-  }
+  /* Search Bar */
+  .search-wrap { position: relative; margin-bottom: 20px; }
 
   .search-wrap input {
     width: 100%;
     padding: 12px 15px 12px 40px;
-    border-radius: 999px; /* Pill shape */
+    border-radius: 999px;
     border: 1px solid var(--border);
     font-size: 14px;
     outline: none;
@@ -118,11 +109,8 @@
     color: var(--text-muted);
   }
 
-  /* --- TABLE STYLING (DESKTOP) --- */
-  .table-wrapper {
-    flex: 1;
-    overflow-y: auto;
-  }
+  /* Table Wrapper */
+  .table-wrapper { flex: 1; overflow-y: auto; }
 
   table { width: 100%; border-collapse: collapse; }
 
@@ -161,7 +149,6 @@
 
   tbody tr:hover { background: rgba(56, 189, 248, 0.05); }
 
-  /* Desktop Data Styles */
   .category-pill { 
     display: inline-block;
     padding: 4px 10px; 
@@ -184,9 +171,10 @@
     padding: 4px 8px;
     border-radius: 4px;
     border: 1px solid rgba(14, 165, 233, 0.2);
+    white-space: nowrap;
   }
 
-  /* --- MOBILE CARD TRANSFORMATION --- */
+  /* --- FIXED MOBILE LAYOUT (GRID SYSTEM) --- */
   @media (max-width: 768px) {
     .container {
       width: 100%;
@@ -198,66 +186,59 @@
       padding: 15px;
     }
 
-    /* Hide Table Header */
+    /* Hide Desktop Header */
     thead { display: none; }
-
     table, tbody, tr, td { display: block; width: 100%; }
 
-    /* Card Styling from your snippet */
+    /* The Card Container */
     tr {
       background: var(--card-bg);
       border-radius: 16px;
       padding: 12px;
       margin-bottom: 10px;
       border: 1px solid rgba(148, 163, 184, 0.15);
-      position: relative;
-      display: flex;
-      flex-direction: column;
+      
+      /* USE GRID TO PREVENT OVERLAP */
+      display: grid;
+      grid-template-columns: 1fr auto; /* Left takes space, Right fits content */
+      gap: 8px;
+      align-items: start;
     }
 
-    /* 1. Category Chip (Top Left) */
+    /* 1. Category Chip (Full Width Top) */
     td:nth-child(1) {
+      grid-column: 1 / -1; /* Spans across top */
       padding: 0;
       border: none;
-      order: 1;
-      margin-bottom: 6px;
-    }
-    .category-pill {
-      font-size: 9px;
-      padding: 2px 8px;
-      border-radius: 999px; /* Pill shape from snippet */
-    }
-
-    /* 2. Service Name (Middle Left) */
-    td:nth-child(2) {
-      padding: 0;
-      border: none;
-      order: 2;
-      font-size: 14px;
       margin-bottom: 2px;
     }
+    .category-pill { font-size: 9px; padding: 2px 8px; border-radius: 999px; }
 
-    /* 3. Extension (Top Right Absolute) */
-    td:nth-child(3) {
-      position: absolute;
-      top: 12px;
-      right: 12px;
+    /* 2. Service Name (Left Side) */
+    td:nth-child(2) {
+      grid-column: 1; /* Left Column */
       padding: 0;
       border: none;
+      font-size: 14px;
+      padding-right: 10px; /* Space between text and number */
+    }
+
+    /* 3. Extension (Right Side) */
+    td:nth-child(3) {
+      grid-column: 2; /* Right Column */
+      padding: 0;
+      border: none;
+      text-align: right;
     }
     
-    tbody tr:hover { background: var(--card-bg); } /* No hover on mobile */
+    /* Ensure no hover effect on touch */
+    tbody tr:hover { background: var(--card-bg); }
   }
 
-  /* --- LOADING ART --- */
-  .loading-container { 
-    padding: 60px; 
-    text-align: center; 
-    color: var(--primary);
-  }
+  /* Loading Spinner */
+  .loading-container { padding: 60px; text-align: center; color: var(--primary); }
   .spinner {
-    width: 30px; 
-    height: 30px; 
+    width: 30px; height: 30px; 
     border: 3px solid rgba(14, 165, 233, 0.3); 
     border-top: 3px solid var(--primary); 
     border-radius: 50%; 
@@ -266,7 +247,7 @@
   }
   .loading-text { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
 
-  /* Footer Art */
+  /* Footer */
   .footer {
     margin-top: 15px;
     padding-top: 15px;
@@ -276,13 +257,7 @@
     font-size: 10px;
     color: var(--text-muted);
   }
-  .tag {
-    padding: 2px 8px;
-    border-radius: 999px;
-    border: 1px solid rgba(56, 189, 248, 0.3);
-    color: var(--primary);
-  }
-
+  .tag { padding: 2px 8px; border-radius: 999px; border: 1px solid rgba(56, 189, 248, 0.3); color: var(--primary); }
   .hidden { display: none !important; }
   @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 </style>
@@ -305,12 +280,10 @@
   </div>
 
   <div class="table-wrapper">
-    
     <div id="loading-area" class="loading-container">
       <div class="spinner"></div>
       <div class="loading-text">Loading Database...</div>
     </div>
-
     <table>
       <thead>
         <tr>
@@ -321,7 +294,6 @@
       </thead>
       <tbody id="tbody"></tbody>
     </table>
-  
   </div>
 
   <div class="footer">
@@ -339,7 +311,6 @@ let data = [];
 let sortDir = 1; 
 let lastSortCol = ''; 
 
-// 1. DATA CONNECTION (Same Code)
 function callback(response) {
   console.log("Data received:", response);
   data = response;
@@ -353,15 +324,12 @@ function loadData() {
   document.body.appendChild(script);
 }
 
-// 2. RENDER LOGIC
 function renderRows(list){
   tbody.innerHTML = "";
-  
   if (list.length === 0 && data.length > 0) {
     tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding: 40px; color: #9ca3af;">No results found.</td></tr>`;
     return;
   }
-
   list.forEach(row => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
@@ -373,18 +341,15 @@ function renderRows(list){
   });
 }
 
-// 3. SORT LOGIC
 function sortBy(col) {
   if (lastSortCol === col) { sortDir = sortDir * -1; } else { sortDir = 1; lastSortCol = col; }
-  
   updateSortUI(col, sortDir);
-
   data.sort((a, b) => {
     let valA = String(a[col] || '').toLowerCase();
     let valB = String(b[col] || '').toLowerCase();
     return valA.localeCompare(valB, undefined, { numeric: true, sensitivity: 'base' }) * sortDir;
   });
-  triggerSearch(); // Re-apply search to maintain view
+  triggerSearch(); 
 }
 
 function updateSortUI(col, dir) {
@@ -397,7 +362,6 @@ function updateSortUI(col, dir) {
   }
 }
 
-// 4. SEARCH LOGIC
 function triggerSearch() { searchInput.dispatchEvent(new Event('input')); }
 
 searchInput.addEventListener('input', function(){
@@ -411,7 +375,6 @@ searchInput.addEventListener('input', function(){
   renderRows(filtered);
 });
 
-// START
 loadData();
 </script>
 
