@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>A3 Extensions Directory</title>
+<style>
+body{ font-family:sans-serif; padding:16px; background:#f5f5f5; }
+h1{ text-align:center; }
+#search{ width:100%; padding:8px; margin-bottom:12px; }
+table{ width:100%; border-collapse:collapse; background:#fff; }
+th,td{ padding:8px; border-bottom:1px solid #eee; }
+.category-pill{ padding:2px 6px; background:#e3e7ff; border-radius:999px; font-size:0.75rem; }
+</style>
+</head>
+<body>
+
+<h1>A3 – Extensions Directory</h1>
+<input id="search" type="text" placeholder="Search by room, service, or extension…">
+<table>
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Service</th>
+      <th>Extension</th>
+    </tr>
+  </thead>
+  <tbody id="tbody"></tbody>
+</table>
+
+<script>
+const tbody = document.getElementById('tbody');
+const searchInput = document.getElementById('search');
+let data = [];
+
+// JSONP callback function
+function callback(response) {
+  data = response;
+  renderRows(data);
+}
+
+// Render table rows
+function renderRows(list){
+  tbody.innerHTML = "";
+  list.forEach(row => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><span class="category-pill">${row.category || ''}</span></td>
+      <td>${row.service}</td>
+      <td>${row.extension}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// Load data using JSONP
+function loadData() {
+  const script = document.createElement('script');
+  script.src = "https://script.google.com/macros/s/AKfycbx5Bc-mlv10RgwfPrfoIBsKIwW4l2pmDaOwDhHIp2PHO7qCsDUxPWWzzwjGrGzFSRXS/exec"; // Replace with your Web App URL
+  document.body.appendChild(script);
+}
+
+// Search filter
+searchInput.addEventListener('input', function(){
+  const q = this.value.toLowerCase();
+  const filtered = data.filter(row =>
+    (row.category || '').toLowerCase().includes(q) ||
+    row.service.toLowerCase().includes(q) ||
+    row.extension.toLowerCase().includes(q)
+  );
+  renderRows(filtered);
+});
+
+// Start
+loadData();
+</script>
+
+</body>
+</html>
