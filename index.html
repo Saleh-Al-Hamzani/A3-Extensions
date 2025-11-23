@@ -2,221 +2,289 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Directory</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A3 Extensions · Directory</title>
 <style>
   :root {
-    /* --- TECH BLUE PALETTE --- */
-    --primary-dark: #0f172a;   
-    --primary-light: #0284c7;  
-    --bg-page: #f1f5f9;        
-    --bg-card: #ffffff;
-    --text-main: #334155;      
-    --text-sub: #64748b;
-    --border-radius: 8px;
+    /* --- ART FROM YOUR SNIPPET --- */
+    --bg-dark: #020617;
+    --bg-gradient: radial-gradient(circle at top, #1f2937 0, #020617 55%, #020617 100%);
+    --card-bg: radial-gradient(circle at top left, rgba(30, 41, 59, 0.4), rgba(15,23,42, 0.6));
+    --primary: #0ea5e9; /* Cyan Blue */
+    --primary-soft: rgba(56, 189, 248, 0.1);
+    --border: rgba(148, 163, 184, 0.2);
+    --text-main: #e5e7eb;
+    --text-muted: #9ca3af;
+    --font-stack: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
   }
+
+  * { box-sizing: border-box; }
 
   body { 
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-    padding: 0; 
+    font-family: var(--font-stack);
+    min-height: 100vh;
     margin: 0;
-    background-color: var(--bg-page); 
+    padding: 0;
+    background: var(--bg-gradient);
     color: var(--text-main);
-  }
-
-  .container {
-    width: 80%; 
-    max-width: 1600px;
-    margin: 50px auto;
-  }
-
-  /* Header */
-  header {
-    margin-bottom: 30px;
-    border-bottom: 2px solid #e2e8f0;
-    padding-bottom: 20px;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-  }
-  
-  .header-content h1 { 
-    font-size: 2.2rem; 
-    font-weight: 800; 
-    color: var(--primary-dark);
-    margin: 0;
-    letter-spacing: -1px;
-  }
-  
-  .subtitle {
-    color: var(--text-sub);
-    font-size: 1rem;
-    margin-top: 5px;
-    font-weight: 400;
+    justify-content: center;
   }
 
-  /* Search Bar */
-  .search-wrapper {
+  /* Responsive Container (Wide on Desktop, Phone-like on Mobile) */
+  .container {
+    width: 90%; 
+    max-width: 1400px;
+    margin: 40px auto;
+    background: linear-gradient(145deg, rgba(15,23,42,0.9), rgba(15,23,42,0.98));
+    border-radius: 24px;
+    padding: 24px;
+    border: 1px solid var(--border);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    min-height: 80vh;
+  }
+
+  /* --- HEADER ART --- */
+  header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid rgba(56, 189, 248, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary);
+    background: radial-gradient(circle at 30% 0, #1e293b 0, #020617 60%);
+    box-shadow: 0 0 15px rgba(14, 165, 233, 0.2);
+  }
+
+  .titles h1 {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #e5e7eb;
+    margin: 0 0 2px 0;
+  }
+
+  .titles p {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  /* --- SEARCH BAR ART --- */
+  .search-wrap {
     position: relative;
-    width: 100%;
     margin-bottom: 20px;
   }
 
-  #search { 
-    width: 100%; 
-    padding: 18px 20px 18px 55px; 
-    border: 1px solid #cbd5e1; 
-    border-radius: var(--border-radius);
-    font-size: 1.1rem;
-    background: var(--bg-card);
-    transition: all 0.2s ease;
+  .search-wrap input {
+    width: 100%;
+    padding: 12px 15px 12px 40px;
+    border-radius: 999px; /* Pill shape */
+    border: 1px solid var(--border);
+    font-size: 14px;
+    outline: none;
+    background: #0b1120;
     color: var(--text-main);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    box-sizing: border-box;
+    transition: all 0.2s;
   }
 
-  #search:focus {
-    outline: none;
-    border-color: var(--primary-light);
-    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15); 
+  .search-wrap input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.25);
   }
 
   .search-icon {
     position: absolute;
+    left: 14px;
     top: 50%;
-    left: 20px;
     transform: translateY(-50%);
-    width: 22px;
-    height: 22px;
-    color: var(--text-sub);
-    pointer-events: none;
+    font-size: 14px;
+    color: var(--text-muted);
   }
 
-  /* --- NEW: MOBILE SORT BAR --- */
-  .mobile-sort-controls {
-    display: none; /* Hidden by default on Desktop */
-    gap: 10px;
-    margin-bottom: 20px;
-    overflow-x: auto; /* Allow scrolling if buttons are wide */
-    white-space: nowrap;
-    padding-bottom: 5px;
-  }
-
-  .sort-btn {
+  /* --- TABLE STYLING (DESKTOP) --- */
+  .table-wrapper {
     flex: 1;
-    background: #fff;
-    border: 1px solid #cbd5e1;
-    padding: 10px 15px;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--text-sub);
-    cursor: pointer;
-    transition: all 0.2s;
+    overflow-y: auto;
   }
 
-  /* Active Sort Button State */
-  .sort-btn.active {
-    background: var(--primary-light);
-    color: white;
-    border-color: var(--primary-light);
-  }
-
-  /* Table Card */
-  .table-card {
-    background: var(--bg-card);
-    border-radius: var(--border-radius);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
-    border: 1px solid #e2e8f0;
-  }
-
-  table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  table { width: 100%; border-collapse: collapse; }
 
   thead {
-    background-color: #f8fafc;
-    border-bottom: 1px solid #e2e8f0;
+    position: sticky;
+    top: 0;
+    background: rgba(15, 23, 42, 0.95);
+    z-index: 10;
+    border-bottom: 1px solid var(--border);
   }
 
   th { 
     text-align: left; 
-    padding: 20px 30px; 
-    font-size: 0.8rem; 
+    padding: 15px; 
+    font-size: 11px; 
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-sub);
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
     cursor: pointer; 
     user-select: none;
   }
 
-  th:hover { background-color: #e2e8f0; color: var(--primary-dark); }
-  .sort-icon { display: inline-block; margin-left: 5px; font-size: 0.7rem; opacity: 0.3; }
-  th.active .sort-icon { opacity: 1; color: var(--primary-light); }
+  th:hover { color: var(--primary); }
+  
+  .sort-icon { display: inline-block; margin-left: 5px; opacity: 0.5; }
+  th.active .sort-icon { opacity: 1; color: var(--primary); }
 
   td { 
-    padding: 20px 30px; 
-    border-bottom: 1px solid #f1f5f9; 
+    padding: 12px 15px; 
+    border-bottom: 1px solid rgba(148, 163, 184, 0.1); 
     vertical-align: middle;
-    font-size: 1.05rem;
-    word-wrap: break-word;
+    font-size: 13px;
+    color: var(--text-main);
   }
 
-  tbody tr:hover { background-color: #f0f9ff; cursor: default; }
+  tbody tr:hover { background: rgba(56, 189, 248, 0.05); }
 
-  /* Data Styling */
+  /* Desktop Data Styles */
   .category-pill { 
     display: inline-block;
     padding: 4px 10px; 
-    background: #e2e8f0;
-    color: #475569; 
-    border-radius: 4px;
-    font-size: 0.75rem; 
-    font-weight: 700;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    border-radius: 6px;
+    font-size: 10px; 
+    font-weight: 600;
     text-transform: uppercase;
+    color: #cbd5e1;
+    background: rgba(30, 41, 59, 0.5);
   }
 
-  .service-name { font-weight: 600; color: var(--primary-dark); display: block; }
-  .ext-number { font-family: 'Courier New', monospace; font-weight: 700; font-size: 1.2rem; color: var(--primary-light); }
+  .service-name { font-weight: 600; color: #f3f4f6; }
+  
+  .ext-number { 
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-weight: 700;
+    color: var(--primary);
+    background: rgba(14, 165, 233, 0.1);
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(14, 165, 233, 0.2);
+  }
 
-  /* Loading Spinner */
-  .loading-container { padding: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-  .spinner { width: 40px; height: 40px; border: 4px solid #e0f2fe; border-top: 4px solid var(--primary-light); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
-  .loading-text { color: var(--text-sub); font-size: 0.9rem; font-weight: 500; }
-  .footer-credit { margin-top: 40px; text-align: right; color: #94a3b8; font-size: 0.85rem; font-family: monospace; }
-  .footer-credit span { color: var(--primary-dark); font-weight: 700; }
-  .hidden { display: none !important; }
-  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-  /* --- MOBILE FIXES --- */
+  /* --- MOBILE CARD TRANSFORMATION --- */
   @media (max-width: 768px) {
-    .container { width: 95%; margin: 20px auto; }
-    
-    /* Show the Mobile Sort Controls */
-    .mobile-sort-controls { display: flex; }
-
-    /* Hide the Desktop Table Header */
-    thead { display: none; }
-    
-    table, tbody, tr, td { display: block; width: 100%; box-sizing: border-box; }
-    
-    tr {
-      margin-bottom: 15px;
-      border-bottom: 1px solid #e2e8f0;
+    .container {
+      width: 100%;
+      height: 100vh;
+      max-width: none;
+      margin: 0;
+      border-radius: 0;
+      border: none;
       padding: 15px;
-      background: #fff;
+    }
+
+    /* Hide Table Header */
+    thead { display: none; }
+
+    table, tbody, tr, td { display: block; width: 100%; }
+
+    /* Card Styling from your snippet */
+    tr {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 12px;
+      margin-bottom: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.15);
       position: relative;
       display: flex;
       flex-direction: column;
     }
 
-    /* Card Layout Reordering */
-    td:nth-child(1) { padding: 0 0 8px 0; border: none; order: 1; }
-    td:nth-child(2) { padding: 0; border: none; font-size: 1.1rem; order: 3; }
-    td:nth-child(3) { position: absolute; top: 15px; right: 15px; padding: 0; border: none; text-align: right; }
+    /* 1. Category Chip (Top Left) */
+    td:nth-child(1) {
+      padding: 0;
+      border: none;
+      order: 1;
+      margin-bottom: 6px;
+    }
+    .category-pill {
+      font-size: 9px;
+      padding: 2px 8px;
+      border-radius: 999px; /* Pill shape from snippet */
+    }
+
+    /* 2. Service Name (Middle Left) */
+    td:nth-child(2) {
+      padding: 0;
+      border: none;
+      order: 2;
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+
+    /* 3. Extension (Top Right Absolute) */
+    td:nth-child(3) {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      padding: 0;
+      border: none;
+    }
     
-    tbody tr:hover { background-color: #fff; }
+    tbody tr:hover { background: var(--card-bg); } /* No hover on mobile */
   }
+
+  /* --- LOADING ART --- */
+  .loading-container { 
+    padding: 60px; 
+    text-align: center; 
+    color: var(--primary);
+  }
+  .spinner {
+    width: 30px; 
+    height: 30px; 
+    border: 3px solid rgba(14, 165, 233, 0.3); 
+    border-top: 3px solid var(--primary); 
+    border-radius: 50%; 
+    animation: spin 1s linear infinite; 
+    margin: 0 auto 15px auto;
+  }
+  .loading-text { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
+
+  /* Footer Art */
+  .footer {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+  .tag {
+    padding: 2px 8px;
+    border-radius: 999px;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    color: var(--primary);
+  }
+
+  .hidden { display: none !important; }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
@@ -224,43 +292,41 @@
 <div class="container">
   
   <header>
-    <div class="header-content">
-      <h1>A3 Directory</h1>
-      <div class="subtitle">Internal Services & Extensions</div>
+    <div class="avatar">A3</div>
+    <div class="titles">
+      <h1>Extensions</h1>
+      <p>Directory & Services</p>
     </div>
   </header>
 
-  <div class="search-wrapper">
-    <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-    <input id="search" type="text" placeholder="Search...">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input id="search" type="search" placeholder="Search service, category, or extension..." autocomplete="off">
   </div>
 
-  <div class="mobile-sort-controls">
-    <button onclick="sortBy('category')" id="mob-category" class="sort-btn">Category</button>
-    <button onclick="sortBy('service')" id="mob-service" class="sort-btn">Service</button>
-    <button onclick="sortBy('extension')" id="mob-extension" class="sort-btn">Extension</button>
-  </div>
-
-  <div class="table-card">
+  <div class="table-wrapper">
+    
     <div id="loading-area" class="loading-container">
       <div class="spinner"></div>
-      <div class="loading-text">Synchronizing Database...</div>
+      <div class="loading-text">Loading Database...</div>
     </div>
 
     <table>
       <thead>
         <tr>
-          <th width="20%" onclick="sortBy('category')">Category <span id="icon-category" class="sort-icon">⇅</span></th>
-          <th width="60%" onclick="sortBy('service')">Service <span id="icon-service" class="sort-icon">⇅</span></th>
-          <th width="20%" onclick="sortBy('extension')">Extension <span id="icon-extension" class="sort-icon">⇅</span></th>
+          <th width="25%" onclick="sortBy('category')">Category <span id="icon-category" class="sort-icon">⇅</span></th>
+          <th width="50%" onclick="sortBy('service')">Service <span id="icon-service" class="sort-icon">⇅</span></th>
+          <th width="25%" onclick="sortBy('extension')">Ext <span id="icon-extension" class="sort-icon">⇅</span></th>
         </tr>
       </thead>
       <tbody id="tbody"></tbody>
     </table>
+  
   </div>
 
-  <div class="footer-credit">
-    Compiled by <span>F1520110 – Nawaf Alshammari</span>
+  <div class="footer">
+    <span>F1520110 · Nawaf Alshammari</span>
+    <span class="tag">LIVE DATA</span>
   </div>
 
 </div>
@@ -273,6 +339,7 @@ let data = [];
 let sortDir = 1; 
 let lastSortCol = ''; 
 
+// 1. DATA CONNECTION (Same Code)
 function callback(response) {
   console.log("Data received:", response);
   data = response;
@@ -280,11 +347,18 @@ function callback(response) {
   renderRows(data);
 }
 
+function loadData() {
+  const script = document.createElement('script');
+  script.src = "https://script.google.com/macros/s/AKfycbx5Bc-mlv10RgwfPrfoIBsKIwW4l2pmDaOwDhHIp2PHO7qCsDUxPWWzzwjGrGzFSRXS/exec"; 
+  document.body.appendChild(script);
+}
+
+// 2. RENDER LOGIC
 function renderRows(list){
   tbody.innerHTML = "";
   
   if (list.length === 0 && data.length > 0) {
-    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding: 60px; color: #94a3b8;">No matching records found.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding: 40px; color: #9ca3af;">No results found.</td></tr>`;
     return;
   }
 
@@ -299,6 +373,7 @@ function renderRows(list){
   });
 }
 
+// 3. SORT LOGIC
 function sortBy(col) {
   if (lastSortCol === col) { sortDir = sortDir * -1; } else { sortDir = 1; lastSortCol = col; }
   
@@ -309,12 +384,10 @@ function sortBy(col) {
     let valB = String(b[col] || '').toLowerCase();
     return valA.localeCompare(valB, undefined, { numeric: true, sensitivity: 'base' }) * sortDir;
   });
-  triggerSearch();
+  triggerSearch(); // Re-apply search to maintain view
 }
 
-// Updated function to handle both Desktop Icons and Mobile Buttons
 function updateSortUI(col, dir) {
-  // 1. Update Desktop Header Icons
   document.querySelectorAll('th').forEach(th => th.classList.remove('active'));
   document.querySelectorAll('.sort-icon').forEach(icon => icon.innerHTML = '⇅');
   const activeIcon = document.getElementById(`icon-${col}`);
@@ -322,29 +395,10 @@ function updateSortUI(col, dir) {
     activeIcon.innerHTML = dir === 1 ? '▲' : '▼';
     activeIcon.parentElement.classList.add('active');
   }
-
-  // 2. Update Mobile Buttons
-  document.querySelectorAll('.sort-btn').forEach(btn => {
-    btn.classList.remove('active');
-    // Remove arrows from mobile buttons text to reset
-    btn.innerHTML = btn.innerHTML.replace(' ▲', '').replace(' ▼', '');
-  });
-  
-  const activeMobBtn = document.getElementById(`mob-${col}`);
-  if (activeMobBtn) {
-    activeMobBtn.classList.add('active');
-    // Add arrow to mobile button text
-    activeMobBtn.innerHTML += dir === 1 ? ' ▲' : ' ▼';
-  }
 }
 
+// 4. SEARCH LOGIC
 function triggerSearch() { searchInput.dispatchEvent(new Event('input')); }
-
-function loadData() {
-  const script = document.createElement('script');
-  script.src = "https://script.google.com/macros/s/AKfycbx5Bc-mlv10RgwfPrfoIBsKIwW4l2pmDaOwDhHIp2PHO7qCsDUxPWWzzwjGrGzFSRXS/exec"; 
-  document.body.appendChild(script);
-}
 
 searchInput.addEventListener('input', function(){
   const q = this.value.toLowerCase().trim();
@@ -357,6 +411,7 @@ searchInput.addEventListener('input', function(){
   renderRows(filtered);
 });
 
+// START
 loadData();
 </script>
 
