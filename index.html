@@ -24,7 +24,6 @@
     color: var(--text-main);
   }
 
-  /* 80% Width Layout */
   .container {
     width: 80%; 
     max-width: 1600px;
@@ -60,7 +59,7 @@
   .search-wrapper {
     position: relative;
     width: 100%;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
   }
 
   #search { 
@@ -91,6 +90,36 @@
     height: 22px;
     color: var(--text-sub);
     pointer-events: none;
+  }
+
+  /* --- NEW: MOBILE SORT BAR --- */
+  .mobile-sort-controls {
+    display: none; /* Hidden by default on Desktop */
+    gap: 10px;
+    margin-bottom: 20px;
+    overflow-x: auto; /* Allow scrolling if buttons are wide */
+    white-space: nowrap;
+    padding-bottom: 5px;
+  }
+
+  .sort-btn {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #cbd5e1;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-sub);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  /* Active Sort Button State */
+  .sort-btn.active {
+    background: var(--primary-light);
+    color: white;
+    border-color: var(--primary-light);
   }
 
   /* Table Card */
@@ -130,7 +159,7 @@
     border-bottom: 1px solid #f1f5f9; 
     vertical-align: middle;
     font-size: 1.05rem;
-    word-wrap: break-word; /* Prevents text overflowing */
+    word-wrap: break-word;
   }
 
   tbody tr:hover { background-color: #f0f9ff; cursor: default; }
@@ -159,11 +188,14 @@
   .hidden { display: none !important; }
   @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-  /* --- MOBILE FIX: TRANSFORM TO CARDS --- */
+  /* --- MOBILE FIXES --- */
   @media (max-width: 768px) {
     .container { width: 95%; margin: 20px auto; }
     
-    /* Hide the Table Header on Mobile */
+    /* Show the Mobile Sort Controls */
+    .mobile-sort-controls { display: flex; }
+
+    /* Hide the Desktop Table Header */
     thead { display: none; }
     
     table, tbody, tr, td { display: block; width: 100%; box-sizing: border-box; }
@@ -173,37 +205,17 @@
       border-bottom: 1px solid #e2e8f0;
       padding: 15px;
       background: #fff;
-      position: relative; /* Allows absolute positioning inside */
+      position: relative;
       display: flex;
       flex-direction: column;
     }
 
-    /* Category (Top Left) */
-    td:nth-child(1) {
-      padding: 0 0 8px 0;
-      border: none;
-      order: 1;
-    }
-
-    /* Service Name (Bottom Main) */
-    td:nth-child(2) {
-      padding: 0;
-      border: none;
-      font-size: 1.1rem;
-      order: 3; /* Move below category */
-    }
-
-    /* Extension (Top Right Absolute) */
-    td:nth-child(3) {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      padding: 0;
-      border: none;
-      text-align: right;
-    }
+    /* Card Layout Reordering */
+    td:nth-child(1) { padding: 0 0 8px 0; border: none; order: 1; }
+    td:nth-child(2) { padding: 0; border: none; font-size: 1.1rem; order: 3; }
+    td:nth-child(3) { position: absolute; top: 15px; right: 15px; padding: 0; border: none; text-align: right; }
     
-    tbody tr:hover { background-color: #fff; } /* Remove hover effect on mobile */
+    tbody tr:hover { background-color: #fff; }
   }
 </style>
 </head>
@@ -223,6 +235,12 @@
     <input id="search" type="text" placeholder="Search...">
   </div>
 
+  <div class="mobile-sort-controls">
+    <button onclick="sortBy('category')" id="mob-category" class="sort-btn">Category</button>
+    <button onclick="sortBy('service')" id="mob-service" class="sort-btn">Service</button>
+    <button onclick="sortBy('extension')" id="mob-extension" class="sort-btn">Extension</button>
+  </div>
+
   <div class="table-card">
     <div id="loading-area" class="loading-container">
       <div class="spinner"></div>
@@ -233,7 +251,7 @@
       <thead>
         <tr>
           <th width="20%" onclick="sortBy('category')">Category <span id="icon-category" class="sort-icon">⇅</span></th>
-          <th width="60%" onclick="sortBy('service')">Service / Room <span id="icon-service" class="sort-icon">⇅</span></th>
+          <th width="60%" onclick="sortBy('service')">Service <span id="icon-service" class="sort-icon">⇅</span></th>
           <th width="20%" onclick="sortBy('extension')">Extension <span id="icon-extension" class="sort-icon">⇅</span></th>
         </tr>
       </thead>
@@ -283,7 +301,9 @@ function renderRows(list){
 
 function sortBy(col) {
   if (lastSortCol === col) { sortDir = sortDir * -1; } else { sortDir = 1; lastSortCol = col; }
-  updateSortIcons(col, sortDir);
+  
+  updateSortUI(col, sortDir);
+
   data.sort((a, b) => {
     let valA = String(a[col] || '').toLowerCase();
     let valB = String(b[col] || '').toLowerCase();
@@ -292,13 +312,29 @@ function sortBy(col) {
   triggerSearch();
 }
 
-function updateSortIcons(col, dir) {
+// Updated function to handle both Desktop Icons and Mobile Buttons
+function updateSortUI(col, dir) {
+  // 1. Update Desktop Header Icons
   document.querySelectorAll('th').forEach(th => th.classList.remove('active'));
   document.querySelectorAll('.sort-icon').forEach(icon => icon.innerHTML = '⇅');
   const activeIcon = document.getElementById(`icon-${col}`);
   if (activeIcon) {
     activeIcon.innerHTML = dir === 1 ? '▲' : '▼';
     activeIcon.parentElement.classList.add('active');
+  }
+
+  // 2. Update Mobile Buttons
+  document.querySelectorAll('.sort-btn').forEach(btn => {
+    btn.classList.remove('active');
+    // Remove arrows from mobile buttons text to reset
+    btn.innerHTML = btn.innerHTML.replace(' ▲', '').replace(' ▼', '');
+  });
+  
+  const activeMobBtn = document.getElementById(`mob-${col}`);
+  if (activeMobBtn) {
+    activeMobBtn.classList.add('active');
+    // Add arrow to mobile button text
+    activeMobBtn.innerHTML += dir === 1 ? ' ▲' : ' ▼';
   }
 }
 
