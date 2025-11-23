@@ -2,75 +2,356 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>A3 Extensions Directory</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Directory</title>
 <style>
-body{ font-family:sans-serif; padding:16px; background:#f5f5f5; }
-h1{ text-align:center; }
-#search{ width:100%; padding:8px; margin-bottom:12px; }
-table{ width:100%; border-collapse:collapse; background:#fff; }
-th,td{ padding:8px; border-bottom:1px solid #eee; }
-.category-pill{ padding:2px 6px; background:#e3e7ff; border-radius:999px; font-size:0.75rem; }
+  :root {
+    /* --- TECH BLUE PALETTE --- */
+    --primary-dark: #0f172a;   
+    --primary-light: #0284c7;  
+    --bg-page: #f1f5f9;        
+    --bg-card: #ffffff;
+    --text-main: #334155;      
+    --text-sub: #64748b;
+    --border-radius: 8px;
+  }
+
+  body { 
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+    padding: 0; 
+    margin: 0;
+    background-color: var(--bg-page); 
+    color: var(--text-main);
+  }
+
+  /* 80% Width Layout */
+  .container {
+    width: 80%; 
+    max-width: 1600px;
+    margin: 50px auto;
+  }
+
+  /* Header */
+  header {
+    margin-bottom: 40px;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  
+  .header-content h1 { 
+    font-size: 2.5rem; 
+    font-weight: 800; 
+    color: var(--primary-dark);
+    margin: 0;
+    letter-spacing: -1px;
+  }
+  
+  .subtitle {
+    color: var(--text-sub);
+    font-size: 1.1rem;
+    margin-top: 5px;
+    font-weight: 400;
+  }
+
+  /* Search Bar */
+  .search-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 25px;
+  }
+
+  #search { 
+    width: 100%; 
+    padding: 20px 20px 20px 55px; 
+    border: 1px solid #cbd5e1; 
+    border-radius: var(--border-radius);
+    font-size: 1.1rem;
+    background: var(--bg-card);
+    transition: all 0.2s ease;
+    color: var(--text-main);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+  }
+
+  #search:focus {
+    outline: none;
+    border-color: var(--primary-light);
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15); 
+  }
+
+  .search-icon {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+    width: 22px;
+    height: 22px;
+    color: var(--text-sub);
+    pointer-events: none;
+  }
+
+  /* Table Card */
+  .table-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+  }
+
+  table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+
+  thead {
+    background-color: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  /* SORTABLE HEADERS STYLING */
+  th { 
+    text-align: left; 
+    padding: 20px 30px; 
+    font-size: 0.8rem; 
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-sub);
+    cursor: pointer; /* Shows it is clickable */
+    user-select: none; /* Prevents text selection when double clicking */
+    transition: background-color 0.2s;
+  }
+
+  th:hover {
+    background-color: #e2e8f0;
+    color: var(--primary-dark);
+  }
+
+  /* Sort Icons */
+  .sort-icon {
+    display: inline-block;
+    margin-left: 5px;
+    font-size: 0.7rem;
+    opacity: 0.3;
+  }
+  
+  th.active .sort-icon {
+    opacity: 1;
+    color: var(--primary-light);
+  }
+
+  td { 
+    padding: 20px 30px; 
+    border-bottom: 1px solid #f1f5f9; 
+    vertical-align: middle;
+    font-size: 1.05rem;
+    word-wrap: break-word;
+  }
+
+  tbody tr:hover { background-color: #f0f9ff; cursor: default; }
+
+  /* --- DATA STYLING --- */
+  .category-pill { 
+    display: inline-block;
+    padding: 4px 10px; 
+    background: #e2e8f0;
+    color: #475569; 
+    border-radius: 4px;
+    font-size: 0.75rem; 
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .service-name {
+    font-weight: 600;
+    color: var(--primary-dark);
+  }
+
+  .ext-number {
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    font-size: 1.2rem; 
+    color: var(--primary-light);
+  }
+
+  /* Loading Spinner */
+  .loading-container {
+    padding: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #e0f2fe;
+    border-top: 4px solid var(--primary-light);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+  }
+
+  .loading-text { color: var(--text-sub); font-size: 0.9rem; font-weight: 500; letter-spacing: 0.5px; }
+  .footer-credit { margin-top: 40px; text-align: right; color: #94a3b8; font-size: 0.85rem; font-family: monospace; }
+  .footer-credit span { color: var(--primary-dark); font-weight: 700; }
+  
+  .hidden { display: none !important; }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+  @media (max-width: 768px) {
+    .container { width: 95%; margin: 20px auto; }
+    header { flex-direction: column; align-items: flex-start; gap: 10px; }
+    th, td { padding: 15px; }
+  }
 </style>
 </head>
 <body>
 
-<h1>A3 – Extensions Directory</h1>
-<input id="search" type="text" placeholder="Search by room, service, or extension…">
-<table>
-  <thead>
-    <tr>
-      <th>Category</th>
-      <th>Service</th>
-      <th>Extension</th>
-    </tr>
-  </thead>
-  <tbody id="tbody"></tbody>
-</table>
+<div class="container">
+  
+  <header>
+    <div class="header-content">
+      <h1>A3 Directory</h1>
+      <div class="subtitle">Internal Services & Extensions</div>
+    </div>
+  </header>
+
+  <div class="search-wrapper">
+    <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+    <input id="search" type="text" placeholder="Search...">
+  </div>
+
+  <div class="table-card">
+    <div id="loading-area" class="loading-container">
+      <div class="spinner"></div>
+      <div class="loading-text">Synchronizing Database...</div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th width="20%" onclick="sortBy('category')">
+            Category <span id="icon-category" class="sort-icon">⇅</span>
+          </th>
+          <th width="60%" onclick="sortBy('service')">
+            Service / Room <span id="icon-service" class="sort-icon">⇅</span>
+          </th>
+          <th width="20%" onclick="sortBy('extension')">
+            Extension <span id="icon-extension" class="sort-icon">⇅</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <div class="footer-credit">
+    Compiled by <span>F1520110 – Nawaf Alshammari</span>
+  </div>
+
+</div>
 
 <script>
 const tbody = document.getElementById('tbody');
 const searchInput = document.getElementById('search');
+const loadingArea = document.getElementById('loading-area');
 let data = [];
+let sortDir = 1; // 1 = ascending, -1 = descending
+let lastSortCol = ''; // Keeps track of last column clicked
 
-// JSONP callback function
 function callback(response) {
+  console.log("Data received:", response);
   data = response;
+  loadingArea.classList.add('hidden');
   renderRows(data);
 }
 
-// Render table rows
 function renderRows(list){
   tbody.innerHTML = "";
+  
+  if (list.length === 0 && data.length > 0) {
+    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding: 60px; color: #94a3b8;">No matching records found.</td></tr>`;
+    return;
+  }
+
   list.forEach(row => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td><span class="category-pill">${row.category || ''}</span></td>
-      <td>${row.service}</td>
-      <td>${row.extension}</td>
+      <td><span class="category-pill">${row.category || '—'}</span></td>
+      <td class="service-name">${row.service || ''}</td>
+      <td><span class="ext-number">${row.extension || ''}</span></td>
     `;
     tbody.appendChild(tr);
   });
 }
 
-// Load data using JSONP
+// --- NEW SORT FUNCTION ---
+function sortBy(col) {
+  // Toggle direction if clicking the same column, otherwise reset to Ascending
+  if (lastSortCol === col) {
+    sortDir = sortDir * -1;
+  } else {
+    sortDir = 1;
+    lastSortCol = col;
+  }
+
+  // Update Icons
+  updateSortIcons(col, sortDir);
+
+  // Perform Sort
+  data.sort((a, b) => {
+    // Get values safely, treating nulls as empty strings
+    let valA = String(a[col] || '').toLowerCase();
+    let valB = String(b[col] || '').toLowerCase();
+
+    // Numeric comparison for extensions or rooms (e.g. "Room 2" vs "Room 10")
+    // 'numeric: true' makes sure 10 comes after 2
+    return valA.localeCompare(valB, undefined, { numeric: true, sensitivity: 'base' }) * sortDir;
+  });
+
+  // Re-run the search filter so the view updates with the sorted data
+  triggerSearch();
+}
+
+function updateSortIcons(col, dir) {
+  // Reset all headers
+  document.querySelectorAll('th').forEach(th => th.classList.remove('active'));
+  document.querySelectorAll('.sort-icon').forEach(icon => icon.innerHTML = '⇅');
+
+  // Set active header
+  const activeIcon = document.getElementById(`icon-${col}`);
+  if (activeIcon) {
+    activeIcon.innerHTML = dir === 1 ? '▲' : '▼'; // Up or Down arrow
+    activeIcon.parentElement.classList.add('active');
+  }
+}
+
+function triggerSearch() {
+  // Manually trigger the input event to re-render the list based on current search + new sort order
+  searchInput.dispatchEvent(new Event('input'));
+}
+// -------------------------
+
 function loadData() {
   const script = document.createElement('script');
-  script.src = "https://script.google.com/macros/s/AKfycbx5Bc-mlv10RgwfPrfoIBsKIwW4l2pmDaOwDhHIp2PHO7qCsDUxPWWzzwjGrGzFSRXS/exec"; // Replace with your Web App URL
+  script.src = "https://script.google.com/macros/s/AKfycbx5Bc-mlv10RgwfPrfoIBsKIwW4l2pmDaOwDhHIp2PHO7qCsDUxPWWzzwjGrGzFSRXS/exec"; 
   document.body.appendChild(script);
 }
 
-// Search filter
 searchInput.addEventListener('input', function(){
-  const q = this.value.toLowerCase();
-  const filtered = data.filter(row =>
-    (row.category || '').toLowerCase().includes(q) ||
-    row.service.toLowerCase().includes(q) ||
-    row.extension.toLowerCase().includes(q)
-  );
+  const q = this.value.toLowerCase().trim();
+  const filtered = data.filter(row => {
+    const cat = String(row.category || '').toLowerCase();
+    const svc = String(row.service || '').toLowerCase();
+    const ext = String(row.extension || '').toLowerCase();
+    return cat.includes(q) || svc.includes(q) || ext.includes(q);
+  });
   renderRows(filtered);
 });
 
-// Start
 loadData();
 </script>
 
