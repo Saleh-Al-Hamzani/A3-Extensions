@@ -29,7 +29,6 @@
     justify-content: center;
   }
 
-  /* Container */
   .container {
     width: 90%; 
     max-width: 1400px;
@@ -44,7 +43,6 @@
     min-height: 80vh;
   }
 
-  /* Header */
   header {
     display: flex;
     align-items: center;
@@ -80,7 +78,6 @@
 
   .titles p { font-size: 12px; color: var(--text-muted); margin: 0; }
 
-  /* Search Bar */
   .search-wrap { position: relative; margin-bottom: 20px; }
 
   .search-wrap input {
@@ -109,9 +106,39 @@
     color: var(--text-muted);
   }
 
+  /* --- NEW: MOBILE SORT CONTROLS --- */
+  .mobile-sort {
+    display: none; /* Hidden on Desktop */
+    gap: 10px;
+    margin-bottom: 15px;
+    overflow-x: auto;
+    padding-bottom: 5px;
+  }
+
+  .sort-btn {
+    flex: 1;
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+
+  .sort-btn.active {
+    background: rgba(14, 165, 233, 0.15);
+    border-color: var(--primary);
+    color: var(--primary);
+    box-shadow: 0 0 10px rgba(14, 165, 233, 0.1);
+  }
+
   /* Table Wrapper */
   .table-wrapper { flex: 1; overflow-y: auto; }
-
   table { width: 100%; border-collapse: collapse; }
 
   thead {
@@ -123,139 +150,80 @@
   }
 
   th { 
-    text-align: left; 
-    padding: 15px; 
-    font-size: 11px; 
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--text-muted);
-    cursor: pointer; 
-    user-select: none;
+    text-align: left; padding: 15px; font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted);
+    cursor: pointer; user-select: none;
   }
 
   th:hover { color: var(--primary); }
-  
   .sort-icon { display: inline-block; margin-left: 5px; opacity: 0.5; }
   th.active .sort-icon { opacity: 1; color: var(--primary); }
 
   td { 
-    padding: 12px 15px; 
-    border-bottom: 1px solid rgba(148, 163, 184, 0.1); 
-    vertical-align: middle;
-    font-size: 13px;
-    color: var(--text-main);
+    padding: 12px 15px; border-bottom: 1px solid rgba(148, 163, 184, 0.1); 
+    vertical-align: middle; font-size: 13px; color: var(--text-main);
   }
 
   tbody tr:hover { background: rgba(56, 189, 248, 0.05); }
 
   .category-pill { 
-    display: inline-block;
-    padding: 4px 10px; 
-    border: 1px solid rgba(148, 163, 184, 0.3);
-    border-radius: 6px;
-    font-size: 10px; 
-    font-weight: 600;
-    text-transform: uppercase;
-    color: #cbd5e1;
-    background: rgba(30, 41, 59, 0.5);
+    display: inline-block; padding: 4px 10px; border: 1px solid rgba(148, 163, 184, 0.3);
+    border-radius: 6px; font-size: 10px; font-weight: 600; text-transform: uppercase;
+    color: #cbd5e1; background: rgba(30, 41, 59, 0.5);
   }
-
   .service-name { font-weight: 600; color: #f3f4f6; }
-  
   .ext-number { 
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-weight: 700;
-    color: var(--primary);
-    background: rgba(14, 165, 233, 0.1);
-    padding: 4px 8px;
-    border-radius: 4px;
-    border: 1px solid rgba(14, 165, 233, 0.2);
-    white-space: nowrap;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 700;
+    color: var(--primary); background: rgba(14, 165, 233, 0.1); padding: 4px 8px;
+    border-radius: 4px; border: 1px solid rgba(14, 165, 233, 0.2); white-space: nowrap;
   }
 
-  /* --- FIXED MOBILE LAYOUT (GRID SYSTEM) --- */
+  /* --- MOBILE LAYOUT --- */
   @media (max-width: 768px) {
     .container {
-      width: 100%;
-      height: 100vh;
-      max-width: none;
-      margin: 0;
-      border-radius: 0;
-      border: none;
-      padding: 15px;
+      width: 100%; height: 100vh; max-width: none; margin: 0;
+      border-radius: 0; border: none; padding: 15px;
     }
+
+    /* Show Mobile Sort */
+    .mobile-sort { display: flex; }
 
     /* Hide Desktop Header */
     thead { display: none; }
     table, tbody, tr, td { display: block; width: 100%; }
 
-    /* The Card Container */
     tr {
-      background: var(--card-bg);
-      border-radius: 16px;
-      padding: 12px;
-      margin-bottom: 10px;
-      border: 1px solid rgba(148, 163, 184, 0.15);
-      
-      /* USE GRID TO PREVENT OVERLAP */
-      display: grid;
-      grid-template-columns: 1fr auto; /* Left takes space, Right fits content */
-      gap: 8px;
-      align-items: start;
+      background: var(--card-bg); border-radius: 16px; padding: 12px;
+      margin-bottom: 10px; border: 1px solid rgba(148, 163, 184, 0.15);
+      display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: start;
     }
 
     /* 1. Category Chip (Full Width Top) */
-    td:nth-child(1) {
-      grid-column: 1 / -1; /* Spans across top */
-      padding: 0;
-      border: none;
-      margin-bottom: 2px;
-    }
+    td:nth-child(1) { grid-column: 1 / -1; padding: 0; border: none; margin-bottom: 2px; }
     .category-pill { font-size: 9px; padding: 2px 8px; border-radius: 999px; }
 
     /* 2. Service Name (Left Side) */
-    td:nth-child(2) {
-      grid-column: 1; /* Left Column */
-      padding: 0;
-      border: none;
-      font-size: 14px;
-      padding-right: 10px; /* Space between text and number */
-    }
+    td:nth-child(2) { grid-column: 1; padding: 0; border: none; font-size: 14px; padding-right: 10px; }
 
     /* 3. Extension (Right Side) */
-    td:nth-child(3) {
-      grid-column: 2; /* Right Column */
-      padding: 0;
-      border: none;
-      text-align: right;
-    }
+    td:nth-child(3) { grid-column: 2; padding: 0; border: none; text-align: right; }
     
-    /* Ensure no hover effect on touch */
     tbody tr:hover { background: var(--card-bg); }
   }
 
-  /* Loading Spinner */
+  /* Spinner */
   .loading-container { padding: 60px; text-align: center; color: var(--primary); }
   .spinner {
-    width: 30px; height: 30px; 
-    border: 3px solid rgba(14, 165, 233, 0.3); 
-    border-top: 3px solid var(--primary); 
-    border-radius: 50%; 
-    animation: spin 1s linear infinite; 
-    margin: 0 auto 15px auto;
+    width: 30px; height: 30px; border: 3px solid rgba(14, 165, 233, 0.3); 
+    border-top: 3px solid var(--primary); border-radius: 50%; 
+    animation: spin 1s linear infinite; margin: 0 auto 15px auto;
   }
   .loading-text { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
 
   /* Footer */
   .footer {
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    font-size: 10px;
-    color: var(--text-muted);
+    margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted);
   }
   .tag { padding: 2px 8px; border-radius: 999px; border: 1px solid rgba(56, 189, 248, 0.3); color: var(--primary); }
   .hidden { display: none !important; }
@@ -277,6 +245,12 @@
   <div class="search-wrap">
     <span class="search-icon">🔍</span>
     <input id="search" type="search" placeholder="Search service, category, or extension..." autocomplete="off">
+  </div>
+
+  <div class="mobile-sort">
+    <div id="mob-category" class="sort-btn" onclick="sortBy('category')">Category</div>
+    <div id="mob-service" class="sort-btn" onclick="sortBy('service')">Service</div>
+    <div id="mob-extension" class="sort-btn" onclick="sortBy('extension')">Ext</div>
   </div>
 
   <div class="table-wrapper">
@@ -353,12 +327,20 @@ function sortBy(col) {
 }
 
 function updateSortUI(col, dir) {
+  // Desktop
   document.querySelectorAll('th').forEach(th => th.classList.remove('active'));
   document.querySelectorAll('.sort-icon').forEach(icon => icon.innerHTML = '⇅');
   const activeIcon = document.getElementById(`icon-${col}`);
   if (activeIcon) {
     activeIcon.innerHTML = dir === 1 ? '▲' : '▼';
     activeIcon.parentElement.classList.add('active');
+  }
+
+  // Mobile
+  document.querySelectorAll('.sort-btn').forEach(btn => btn.classList.remove('active'));
+  const activeBtn = document.getElementById(`mob-${col}`);
+  if (activeBtn) {
+    activeBtn.classList.add('active');
   }
 }
 
