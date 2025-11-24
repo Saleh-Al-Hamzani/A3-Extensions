@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>A3 Extensions · Directory</title>
+   <link rel="icon" type="image/png" href="logo.png"> 
+
 <style>
   :root {
     --bg-dark: #020617;
@@ -74,7 +76,6 @@
   .titles h1 { font-size: 18px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #e5e7eb; margin: 0 0 2px 0; }
   .titles p { font-size: 12px; color: var(--text-muted); margin: 0; }
   
-  /* Status Dot (To show background activity) */
   .status-dot {
     margin-left: auto;
     width: 8px;
@@ -186,12 +187,35 @@
   }
   .tag { padding: 2px 8px; border-radius: 999px; border: 1px solid rgba(56, 189, 248, 0.3); color: var(--primary); }
 
+  /* --- TOAST NOTIFICATION --- */
+  #toast {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #0ea5e9;
+    color: #fff;
+    text-align: center;
+    border-radius: 50px;
+    padding: 12px;
+    position: fixed;
+    z-index: 100;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    opacity: 0;
+    transition: opacity 0.5s, bottom 0.5s;
+  }
+  #toast.show {
+    visibility: visible;
+    opacity: 1;
+    bottom: 50px;
+  }
+
   /* --- MOBILE --- */
   @media (max-width: 768px) {
-    .container {
-      width: 100%; height: 100dvh; max-width: none; margin: 0;
-      border-radius: 0; border: none; padding: 15px;
-    }
+    .container { width: 100%; height: 100dvh; max-width: none; margin: 0; border-radius: 0; border: none; padding: 15px; }
     .mobile-sort { display: flex; }
     thead { display: none; }
     table, tbody, tr, td { display: block; width: 100%; }
@@ -220,12 +244,12 @@
 <div class="container">
   
   <header>
-    <div class="avatar">A3</div>
+    <div class="avatar"><img src="logo.png" alt="logo"width="50" height="50"></div>
     <div class="titles">
       <h1>A3 Extensions</h1>
       <p>Directory & Services</p>
     </div>
-    <div id="sync-indicator" class="status-dot" title="Syncing data..."></div>
+    <div id="sync-indicator" class="status-dot" title="Checking for updates..."></div>
   </header>
 
   <div class="controls-area">
@@ -237,7 +261,7 @@
     <div class="mobile-sort">
       <div id="mob-category" class="sort-btn" onclick="sortBy('category')">Category</div>
       <div id="mob-service" class="sort-btn" onclick="sortBy('service')">Service</div>
-      <div id="mob-extension" class="sort-btn" onclick="sortBy('extension')">Ext</div>
+      <div id="mob-extension" class="sort-btn" onclick="sortBy('extension')">Extension</div>
     </div>
   </div>
 
@@ -251,7 +275,7 @@
         <tr>
           <th width="25%" onclick="sortBy('category')">Category <span id="icon-category" class="sort-icon">⇅</span></th>
           <th width="50%" onclick="sortBy('service')">Service <span id="icon-service" class="sort-icon">⇅</span></th>
-          <th width="25%" onclick="sortBy('extension')">Ext <span id="icon-extension" class="sort-icon">⇅</span></th>
+          <th width="25%" onclick="sortBy('extension')">Extension <span id="icon-extension" class="sort-icon">⇅</span></th>
         </tr>
       </thead>
       <tbody id="tbody"></tbody>
@@ -263,6 +287,8 @@
     <span class="tag">LIVE</span>
   </div>
 
+  <div id="toast">Directory updated from cloud</div>
+
 </div>
 
 <script>
@@ -270,31 +296,36 @@ const tbody = document.getElementById('tbody');
 const searchInput = document.getElementById('search');
 const loadingArea = document.getElementById('loading-area');
 const syncDot = document.getElementById('sync-indicator');
+const toast = document.getElementById('toast');
 const STORAGE_KEY = 'a3_directory_data_v1'; 
 
 let data = [];
 let sortDir = 1; 
 let lastSortCol = ''; 
 
-// 1. Logic: Save to local, check if changed, only render if needed
 function callback(response) {
   const previousDataStr = localStorage.getItem(STORAGE_KEY);
   const newDataStr = JSON.stringify(response);
 
-  // Always save the fresh data
-  localStorage.setItem(STORAGE_KEY, newDataStr);
-  
   // Stop syncing indicator
   syncDot.classList.remove('active');
 
-  // ONLY re-render if the data is actually different or if it was empty
-  if (previousDataStr !== newDataStr || data.length === 0) {
+  // COMPARE: Check if the new data is different (Modified or Deleted rows)
+  if (previousDataStr !== newDataStr) {
+    // 1. Save new data
+    localStorage.setItem(STORAGE_KEY, newDataStr);
     data = response;
-    // If user is searching, filter, otherwise show all
+    
+    // 2. Render new view
     if (searchInput.value.trim() !== "") {
        triggerSearch();
     } else {
        renderRows(data);
+    }
+
+    // 3. IF this wasn't the very first load, show the "Updated" toast
+    if (previousDataStr !== null) {
+      showToast();
     }
   }
   
@@ -302,9 +333,8 @@ function callback(response) {
 }
 
 function loadData() {
-  syncDot.classList.add('active'); // Show blue dot to indicate background check
+  syncDot.classList.add('active'); 
 
-  // STEP A: Try to load from LocalStorage immediately (Instant)
   const cached = localStorage.getItem(STORAGE_KEY);
   if (cached) {
     try {
@@ -314,20 +344,22 @@ function loadData() {
       console.log("Cache error", e);
     }
   } else {
-    // If no cache, show spinner
     loadingArea.classList.remove('hidden');
   }
 
-  // STEP B: Fetch fresh data in the background
   const script = document.createElement('script');
   script.src = "https://script.google.com/macros/s/AKfycbx5Bc-mlv10RgwfPrfoIBsKIwW4l2pmDaOwDhHIp2PHO7qCsDUxPWWzzwjGrGzFSRXS/exec"; 
   document.body.appendChild(script);
 }
 
+function showToast() {
+  toast.className = "show";
+  setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
+}
+
 function renderRows(list){
   tbody.innerHTML = "";
   if (list.length === 0) {
-    // Check if we are searching or if data is truly empty
     if(data.length > 0) {
         tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding: 40px; color: #9ca3af;">No results found.</td></tr>`;
     }
