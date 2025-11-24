@@ -20,32 +20,32 @@
 
   body { 
     font-family: var(--font-stack);
-    height: 100vh; /* Lock body height */
+    height: 100vh;
     margin: 0;
     padding: 0;
     background: var(--bg-gradient);
     color: var(--text-main);
     display: flex;
     justify-content: center;
-    overflow: hidden; /* Prevent double scrollbars */
+    overflow: hidden;
   }
 
   .container {
     width: 90%; 
     max-width: 1400px;
-    height: 90vh; /* Fixed height on desktop */
-    margin: auto; /* Center vertically */
+    height: 90vh;
+    margin: auto;
     background: linear-gradient(145deg, rgba(15,23,42,0.9), rgba(15,23,42,0.98));
     border-radius: 24px;
     padding: 24px;
     border: 1px solid var(--border);
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
     display: flex;
-    flex-direction: column; /* Stack children */
+    flex-direction: column;
     position: relative;
   }
 
-  /* --- HEADER (PINNED) --- */
+  /* --- HEADER --- */
   header {
     display: flex;
     align-items: center;
@@ -53,7 +53,7 @@
     margin-bottom: 20px;
     padding-bottom: 15px;
     border-bottom: 1px solid var(--border);
-    flex-shrink: 0; /* Prevent shrinking */
+    flex-shrink: 0;
   }
 
   .avatar {
@@ -73,12 +73,22 @@
 
   .titles h1 { font-size: 18px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #e5e7eb; margin: 0 0 2px 0; }
   .titles p { font-size: 12px; color: var(--text-muted); margin: 0; }
-
-  /* --- SEARCH & CONTROLS (PINNED) --- */
-  .controls-area {
-    flex-shrink: 0; /* Prevent shrinking */
-    margin-bottom: 15px;
+  
+  /* Status Dot (To show background activity) */
+  .status-dot {
+    margin-left: auto;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #3b82f6;
+    opacity: 0;
+    transition: opacity 0.3s;
   }
+  .status-dot.active { opacity: 1; animation: pulse 2s infinite; }
+  @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+
+  /* --- SEARCH & CONTROLS --- */
+  .controls-area { flex-shrink: 0; margin-bottom: 15px; }
 
   .search-wrap { position: relative; margin-bottom: 15px; }
 
@@ -127,13 +137,12 @@
     box-shadow: 0 0 10px rgba(14, 165, 233, 0.1);
   }
 
-  /* --- SCROLLABLE TABLE AREA --- */
+  /* --- TABLE --- */
   .table-wrapper {
-    flex: 1; /* Takes all remaining height */
-    overflow-y: auto; /* Internal Scroll */
+    flex: 1;
+    overflow-y: auto;
     position: relative;
     border-radius: 12px;
-    /* Custom Scrollbar */
     scrollbar-width: thin;
     scrollbar-color: var(--primary) transparent;
   }
@@ -147,7 +156,7 @@
   thead {
     position: sticky;
     top: 0;
-    background: #0f172a; /* Solid background so rows hide behind it */
+    background: #0f172a;
     z-index: 10;
     border-bottom: 1px solid var(--border);
   }
@@ -168,46 +177,34 @@
   .service-name { font-weight: 600; color: #f3f4f6; }
   .ext-number { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 700; color: var(--primary); background: rgba(14, 165, 233, 0.1); padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(14, 165, 233, 0.2); white-space: nowrap; }
 
-  /* --- FOOTER (PINNED) --- */
+  /* --- FOOTER --- */
   .footer {
-    flex-shrink: 0; /* Prevent shrinking */
+    flex-shrink: 0;
     margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border);
     display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted);
     background: transparent;
   }
   .tag { padding: 2px 8px; border-radius: 999px; border: 1px solid rgba(56, 189, 248, 0.3); color: var(--primary); }
 
-  /* --- MOBILE FIXES --- */
+  /* --- MOBILE --- */
   @media (max-width: 768px) {
     .container {
-      width: 100%;
-      height: 100dvh; /* Dynamic Viewport Height (Fixes Safari/Chrome bar issues) */
-      max-width: none;
-      margin: 0;
-      border-radius: 0;
-      border: none;
-      padding: 15px;
+      width: 100%; height: 100dvh; max-width: none; margin: 0;
+      border-radius: 0; border: none; padding: 15px;
     }
-
     .mobile-sort { display: flex; }
     thead { display: none; }
     table, tbody, tr, td { display: block; width: 100%; }
-
-    /* Space out the bottom so last card isn't cut off by footer */
     tbody { padding-bottom: 10px; }
-
     tr {
       background: var(--card-bg); border-radius: 16px; padding: 12px;
       margin-bottom: 10px; border: 1px solid rgba(148, 163, 184, 0.15);
       display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: start;
     }
-
     td:nth-child(1) { grid-column: 1 / -1; padding: 0; border: none; margin-bottom: 2px; }
     .category-pill { font-size: 9px; padding: 2px 8px; border-radius: 999px; }
-
     td:nth-child(2) { grid-column: 1; padding: 0; border: none; font-size: 14px; padding-right: 10px; }
     td:nth-child(3) { grid-column: 2; padding: 0; border: none; text-align: right; }
-    
     tbody tr:hover { background: var(--card-bg); }
   }
 
@@ -228,6 +225,7 @@
       <h1>A3 Extensions</h1>
       <p>Directory & Services</p>
     </div>
+    <div id="sync-indicator" class="status-dot" title="Syncing data..."></div>
   </header>
 
   <div class="controls-area">
@@ -244,7 +242,7 @@
   </div>
 
   <div class="table-wrapper">
-    <div id="loading-area" class="loading-container">
+    <div id="loading-area" class="loading-container hidden">
       <div class="spinner"></div>
       <div class="loading-text">Loading...</div>
     </div>
@@ -271,17 +269,56 @@
 const tbody = document.getElementById('tbody');
 const searchInput = document.getElementById('search');
 const loadingArea = document.getElementById('loading-area');
+const syncDot = document.getElementById('sync-indicator');
+const STORAGE_KEY = 'a3_directory_data_v1'; 
+
 let data = [];
 let sortDir = 1; 
 let lastSortCol = ''; 
 
+// 1. Logic: Save to local, check if changed, only render if needed
 function callback(response) {
-  data = response;
+  const previousDataStr = localStorage.getItem(STORAGE_KEY);
+  const newDataStr = JSON.stringify(response);
+
+  // Always save the fresh data
+  localStorage.setItem(STORAGE_KEY, newDataStr);
+  
+  // Stop syncing indicator
+  syncDot.classList.remove('active');
+
+  // ONLY re-render if the data is actually different or if it was empty
+  if (previousDataStr !== newDataStr || data.length === 0) {
+    data = response;
+    // If user is searching, filter, otherwise show all
+    if (searchInput.value.trim() !== "") {
+       triggerSearch();
+    } else {
+       renderRows(data);
+    }
+  }
+  
   loadingArea.classList.add('hidden');
-  renderRows(data);
 }
 
 function loadData() {
+  syncDot.classList.add('active'); // Show blue dot to indicate background check
+
+  // STEP A: Try to load from LocalStorage immediately (Instant)
+  const cached = localStorage.getItem(STORAGE_KEY);
+  if (cached) {
+    try {
+      data = JSON.parse(cached);
+      renderRows(data);
+    } catch (e) {
+      console.log("Cache error", e);
+    }
+  } else {
+    // If no cache, show spinner
+    loadingArea.classList.remove('hidden');
+  }
+
+  // STEP B: Fetch fresh data in the background
   const script = document.createElement('script');
   script.src = "https://script.google.com/macros/s/AKfycbx5Bc-mlv10RgwfPrfoIBsKIwW4l2pmDaOwDhHIp2PHO7qCsDUxPWWzzwjGrGzFSRXS/exec"; 
   document.body.appendChild(script);
@@ -289,8 +326,11 @@ function loadData() {
 
 function renderRows(list){
   tbody.innerHTML = "";
-  if (list.length === 0 && data.length > 0) {
-    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding: 40px; color: #9ca3af;">No results found.</td></tr>`;
+  if (list.length === 0) {
+    // Check if we are searching or if data is truly empty
+    if(data.length > 0) {
+        tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding: 40px; color: #9ca3af;">No results found.</td></tr>`;
+    }
     return;
   }
   list.forEach(row => {
