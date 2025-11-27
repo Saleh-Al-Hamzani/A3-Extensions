@@ -86,6 +86,7 @@ header {
   box-shadow: 0 4px 20px rgba(0,0,0,0.3), inset 0 0 0 1px rgba(255,255,255,0.05);
   display: flex; align-items: center; justify-content: center;
   position: relative; overflow: hidden;
+  flex-shrink: 0;
 }
 .logo-box::after {
   content:''; position: absolute; top:0; left:0; right:0; bottom:0;
@@ -97,8 +98,9 @@ header {
   margin: 0; font-size: 1.1rem; font-weight: 800; letter-spacing: -0.02em;
   background: linear-gradient(to right, #fff, #94a3b8);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  white-space: nowrap;
 }
-.titles p { margin: 0; font-size: 0.8rem; color: var(--text-dim); margin-top: 2px; }
+.titles p { margin: 0; font-size: 0.8rem; color: var(--text-dim); margin-top: 2px; white-space: nowrap;}
 
 /* 2. Middle Stats (RRT) */
 .mid-section {
@@ -225,6 +227,7 @@ td {
 
 .service-text {
   font-weight: 500; color: #e2e8f0; font-size: 0.95rem;
+  display: block;
 }
 
 .extension-pill {
@@ -259,35 +262,98 @@ footer {
   box-shadow: 0 0 8px #22c55e;
 }
 
-/* --- RESPONSIVE / MOBILE --- */
-@media (max-width: 1100px) {
+/* --- RESPONSIVE / MOBILE / TABLET FIX --- */
+@media (max-width: 900px) {
+  /* 1. Header Layout */
   header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1rem;
-    gap: 1rem;
-    text-align: center;
+    display: flex; flex-direction: column;
+    align-items: center; text-align: center;
+    padding: 1rem; gap: 1rem;
   }
   
-  .brand-area { justify-content: center; width: 100%; }
+  .brand-area { width: 100%; justify-content: center; }
+  .mid-section { width: 100%; }
+  .controls-area { width: 100%; flex-direction: column; gap: 0.8rem; }
   
-  .rrt-badge { 
-    margin: 0.2rem 0;
-    font-size: 1.2rem;
-  }
-  
-  .controls-area {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.8rem;
+  .search-wrapper { width: 100%; }
+  .action-bar { width: 100%; justify-content: center; }
+
+  .content-wrapper { padding: 0 1rem; }
+  .table-scroll-area { overflow-x: hidden; } /* Prevent horizontal scroll, force stack */
+
+  /* 2. Transform Table to Cards */
+  thead { display: none; } /* Hide headers */
+
+  table, tbody, tr, td {
+    display: block;
     width: 100%;
   }
+
+  tbody tr {
+    background: rgba(30, 41, 59, 0.2);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    padding: 12px;
+    position: relative;
+    /* Grid Layout for the Card */
+    display: grid;
+    grid-template-areas: 
+      "star service"
+      "badge ext";
+    grid-template-columns: 40px 1fr;
+    gap: 8px;
+    align-items: center;
+  }
   
-  .search-box { max-width: none; }
-  .btn-group, .resizer { justify-content: center; }
-  .table-scroll-area { padding: 0 0.5rem; }
-  td, th { padding: 0.8rem 0.5rem; }
+  /* Reset default TD styles */
+  td {
+    padding: 0;
+    border: none;
+    text-align: left;
+  }
+
+  /* Assign Grid Areas */
+  /* Star Column */
+  td:nth-child(1) { 
+    grid-area: star; 
+    display: flex; justify-content: center; 
+  }
+  
+  /* Category Column */
+  td:nth-child(2) { 
+    grid-area: badge; 
+  }
+  
+  /* Service Column */
+  td:nth-child(3) { 
+    grid-area: service;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  
+  /* Extension Column */
+  td:nth-child(4) { 
+    grid-area: ext;
+    text-align: right !important; /* Force align right */
+    justify-self: end;
+  }
+  
+  /* Styling tweaks for card look */
+  .category-badge {
+    font-size: 0.7rem;
+    background: rgba(255,255,255,0.05);
+  }
+  
+  .extension-pill {
+    font-size: 1.1rem;
+  }
+
+  /* Footer Adjustment */
+  footer {
+    flex-direction: column; gap: 10px;
+    text-align: center;
+  }
 }
 </style>
 </head>
