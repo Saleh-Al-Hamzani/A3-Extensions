@@ -17,32 +17,37 @@
   --primary: #0ea5e9;
   --primary-glow: rgba(14, 165, 233, 0.15);
   
-  --alert-red: #ff4d4d; /* New Urgent Red */
+  --alert-red: #ff4d4d;
   
   --text-main: #e5e7eb;
   --text-muted: #9ca3af;
   
   --font-stack: system-ui, -apple-system, "Segoe UI", sans-serif;
   
+  /* Initial Base Size */
   --base-size: 14px; 
 }
 
 * { box-sizing: border-box; }
 
-html, body {
+html {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
   overflow: hidden;
+  font-size: var(--base-size);
+  transition: font-size 0.2s ease;
 }
 
 body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
   font-family: var(--font-stack);
   background: var(--bg-gradient);
   color: var(--text-main);
-  font-size: var(--base-size);
-  transition: font-size 0.2s ease;
   display: flex;
   justify-content: center;
 }
@@ -59,7 +64,7 @@ body {
   background: transparent;
 }
 
-/* ================= HEADER SECTION ================= */
+/* ================= HEADER SECTION (FIXED) ================= */
 
 header {
   flex-shrink: 0;
@@ -68,11 +73,17 @@ header {
   background: rgba(2, 6, 23, 0.85);
   backdrop-filter: blur(10px);
   z-index: 50;
-  display: flex;
+  
+  /* --- CHANGED TO GRID FOR SAFE CENTERING --- */
+  display: grid; 
+  /* 3 Columns: 
+     1fr (Left space) 
+     auto (RRT Badge - fits content) 
+     1fr (Right space) 
+  */
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
-  position: relative; /* Needed for absolute centering */
+  gap: 1rem;
 }
 
 /* Left: Identity */
@@ -80,11 +91,11 @@ header {
   display: flex;
   align-items: center;
   gap: 1rem;
-  z-index: 2; /* Ensure it stays above if overlap */
+  justify-self: start; /* Pushes to far left */
 }
 .logo-box {
-  width: 48px;
-  height: 48px;
+  width: 3.4rem;
+  height: 3.4rem;
   border-radius: 12px;
   background: radial-gradient(circle at 30% 0, #1e293b 0, #020617 70%);
   border: 1px solid rgba(56, 189, 248, 0.3);
@@ -93,7 +104,7 @@ header {
   justify-content: center;
   box-shadow: 0 0 15px rgba(14, 165, 233, 0.15);
 }
-.logo-box img { width: 30px; height: 30px; object-fit: contain; }
+.logo-box img { width: 65%; height: 65%; object-fit: contain; }
 
 .titles h1 {
   margin: 0;
@@ -102,35 +113,36 @@ header {
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: #fff;
+  white-space: nowrap;
 }
 .titles p {
   margin: 0;
   font-size: 0.85rem;
   color: var(--text-muted);
+  white-space: nowrap;
 }
 
-/* Middle: RRT Badge (UPDATED: RED, CENTERED, NO BG) */
+/* Middle: RRT Badge (FIXED) */
 .rrt-badge {
-  /* Absolute positioning to guarantee true center */
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  /* Removed absolute positioning */
+  position: static; 
+  transform: none;
   
-  /* Styling */
+  /* Grid handles centering now */
+  justify-self: center; 
+  
   background: transparent;
   border: none;
   padding: 0;
-  font-size: 1.1rem; /* Slightly larger */
+  font-size: 1.1rem;
   color: var(--alert-red);
   font-weight: 700;
   white-space: nowrap;
   letter-spacing: 0.5px;
-  text-shadow: 0 0 10px rgba(255, 77, 77, 0.3); /* Subtle red glow */
-  color: #ff0000;
-  z-index: 1;
+  text-shadow: 0 0 10px rgba(255, 77, 77, 0.3);
 }
 .rrt-badge strong { 
-  color: #ff0000; /* White numbers to pop against the dark bg */
+  color: #fff;
   font-weight: 900;
 }
 
@@ -139,9 +151,9 @@ header {
   display: flex;
   align-items: center;
   gap: 1rem;
-  flex: 1;
+  justify-self: end; /* Pushes to far right */
+  width: 100%;
   justify-content: flex-end;
-  z-index: 2;
 }
 
 /* Search Bar */
@@ -192,6 +204,7 @@ header {
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s;
+  white-space: nowrap;
 }
 .btn:hover { color: #fff; }
 .btn.active {
@@ -342,23 +355,23 @@ footer {
   background: rgba(2, 6, 23, 0.9);
 }
 
-/* ================= MOBILE ADAPTATION ================= */
+/* ================= MOBILE / HIGH ZOOM ADAPTATION ================= */
 
-@media (max-width: 900px) {
+/* Increased breakpoint to 1100px to handle Large Text Zoom on desktops */
+@media (max-width: 1100px) {
   header {
+    /* Switch to Flex Column */
+    display: flex;
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
     padding: 1rem;
     gap: 1rem;
+    text-align: center;
   }
   
-  .brand-area { justify-content: center; text-align: center; }
+  .brand-area { justify-content: center; width: 100%; }
   
-  /* Reset absolute centering for mobile */
   .rrt-badge { 
-    position: static; 
-    transform: none; 
-    text-align: center; 
     margin: 0.2rem 0;
     font-size: 1.2rem;
   }
@@ -367,6 +380,7 @@ footer {
     flex-direction: column;
     align-items: stretch;
     gap: 0.8rem;
+    width: 100%;
   }
   
   .search-box { max-width: none; }
@@ -401,7 +415,7 @@ footer {
         <input id="search" type="text" placeholder="Search..." autocomplete="off">
       </div>
 
-      <div style="display:flex; gap:10px;">
+      <div style="display:flex; gap:10px; justify-content: center;">
         <div class="btn-group">
           <button id="filter-all" class="btn active">All</button>
           <button id="filter-fav" class="btn">Favorites</button>
@@ -459,6 +473,11 @@ const btnAll = document.getElementById('filter-all');
 const btnFav = document.getElementById('filter-fav');
 const syncDot = document.getElementById('sync-dot');
 
+// --- HELPER FOR REGEX ---
+function escapeRegex(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 // --- INIT ---
 function init() {
   const s = localStorage.getItem(STORAGE_KEY_SIZE);
@@ -481,7 +500,7 @@ function init() {
 function resize(delta) {
   baseSize += delta;
   if(baseSize < 12) baseSize = 12;
-  if(baseSize > 22) baseSize = 22;
+  if(baseSize > 24) baseSize = 24; 
   applySize();
   localStorage.setItem(STORAGE_KEY_SIZE, baseSize);
 }
@@ -514,14 +533,21 @@ function callback(response) {
 function render() {
   tbody.innerHTML = '';
   const q = searchInput.value.toLowerCase().trim();
+  let re = null;
+  if (q) {
+    re = new RegExp('\\b' + escapeRegex(q));
+  }
   
   let list = data.filter(row => {
     const key = makeKey(row);
     if(currentView === 'fav' && !favorites.has(key)) return false;
     if(!q) return true;
-    return (row.category||'').toLowerCase().includes(q) || 
-           (row.service||'').toLowerCase().includes(q) || 
-           (row.extension||'').toLowerCase().includes(q);
+    
+    const cat = String(row.category || '').toLowerCase();
+    const svc = String(row.service || '').toLowerCase();
+    const ext = String(row.extension || '').toLowerCase();
+
+    return re.test(cat) || re.test(svc) || re.test(ext);
   });
 
   if(sortState.col) {
