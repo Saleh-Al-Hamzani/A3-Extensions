@@ -260,89 +260,34 @@ footer {
 }
 
 /* --- RESPONSIVE / MOBILE --- */
-@media (max-width: 900px) {
-  /* --- HEADER ADJUSTMENTS (Keep these) --- */
+@media (max-width: 1100px) {
   header {
-    grid-template-columns: 1fr;
-    gap: 1rem; padding: 1rem;
-    background: rgba(3, 7, 18, 0.95); /* Slightly darker for better read */
-    backdrop-filter: blur(15px);
-    position: sticky; top: 0; border-bottom: 1px solid var(--glass-border);
-  }
-  
-  .brand-area { justify-content: center; text-align: center; }
-  .mid-section { width: 100%; }
-  .rrt-card { width: 100%; justify-content: center; border-radius: 12px; }
-  
-  .controls-area { flex-direction: column; width: 100%; gap: 0.8rem; }
-  .search-wrapper { width: 100%; max-width: none; }
-  .action-bar { width: 100%; justify-content: center; }
-  .icon-btn { flex: 1; }
-  
-  .content-wrapper { padding: 0; }
-  thead { display: none; } 
-  
-  /* --- ROW LAYOUT CHANGES (Single Line) --- */
-  tbody tr {
     display: flex;
-    flex-flow: row nowrap; /* Forces items to stay in one line */
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    padding: 0.8rem 1rem;
-    border-bottom: 1px solid var(--glass-border);
-    gap: 12px; /* Space between star, name, and ext */
-    height: 60px; /* Fixed height for consistency */
-  }
-
-  td { border: none; padding: 0; }
-  
-  /* 1. STAR (Fixed Left) */
-  td:nth-child(1) { 
-    width: 24px; 
-    flex-shrink: 0; 
-    order: 1; 
-  }
-
-  /* 2. CATEGORY (Hidden) 
-     To fit everything on one line on mobile, we usually hide the category.
-     If you really need it, change display to 'block' but it will crowd the text.
-  */
-  td:nth-child(2) { 
-    display: none; 
-  }
-
-  /* 3. SERVICE NAME (Fills remaining space) */
-  td:nth-child(3) { 
-    flex: 1; 
-    order: 2; 
-    margin: 0; 
-    min-width: 0; /* Crucial: allows the text inside to truncate properly */
-  }
-
-  .service-text {
-    font-size: 1rem;
-    display: block;
-    white-space: nowrap;      /* Prevents wrapping to next line */
-    overflow: hidden;         /* Hides overflow text */
-    text-overflow: ellipsis;  /* Adds "..." if text is too long */
+    padding: 1rem;
+    gap: 1rem;
+    text-align: center;
   }
   
-  /* 4. EXTENSION (Fixed Right) */
-  td:nth-child(4) { 
-    width: auto; 
-    order: 3; 
-    text-align: right !important;
-    flex-shrink: 0; /* Ensures extension is never squished */
+  .brand-area { justify-content: center; width: 100%; }
+  
+  .rrt-badge { 
+    margin: 0.2rem 0;
+    font-size: 1.2rem;
   }
   
-  .extension-pill {
-    /* Made slight adjustment to padding to fit better inline */
-    background: rgba(14, 165, 233, 0.1); 
-    padding: 6px 10px; 
-    border-radius: 8px; 
-    border: 1px solid rgba(14, 165, 233, 0.2);
-    font-size: 1rem;
+  .controls-area {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.8rem;
+    width: 100%;
   }
+  
+  .search-box { max-width: none; }
+  .btn-group, .resizer { justify-content: center; }
+  .table-scroll-area { padding: 0 0.5rem; }
+  td, th { padding: 0.8rem 0.5rem; }
 }
 </style>
 </head>
