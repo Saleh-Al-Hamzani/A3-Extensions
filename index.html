@@ -217,13 +217,15 @@ td {
 
 /* Data Styling */
 .category-badge {
-  display: inline-flex; align-items: center;
+  display: inline-block; /* Changed to block for text-overflow to work */
+  align-items: center;
   background: rgba(30, 41, 59, 0.5);
   border: 1px solid rgba(255,255,255,0.05);
   color: var(--text-muted);
   padding: 4px 10px; border-radius: 6px;
   font-size: 0.75rem; font-weight: 600; letter-spacing: 0.02em;
   white-space: nowrap; 
+  max-width: 100%; /* Default safe width */
 }
 
 .service-text {
@@ -234,12 +236,17 @@ td {
   text-overflow: ellipsis; 
 }
 
+/* Extension Pill with Background */
 .extension-pill {
   font-family: 'SF Mono', 'Roboto Mono', monospace;
   font-weight: 600; font-size: 0.95rem;
   color: var(--primary);
   letter-spacing: -0.02em;
   display: inline-block;
+  background: rgba(56, 189, 248, 0.1); 
+  border: 1px solid rgba(56, 189, 248, 0.15); 
+  padding: 4px 8px; 
+  border-radius: 6px; 
 }
 
 .fav-star {
@@ -289,43 +296,51 @@ footer {
   thead { display: none; } 
 
   tbody tr {
-    display: flex; /* Force horizontal layout */
+    display: flex; 
     align-items: center;
     width: 100%;
     padding: 14px 10px;
     border-bottom: 1px solid var(--glass-border);
-    gap: 12px; /* INCREASED GAP TO PREVENT OVERLAP */
+    gap: 12px; /* Standard gap between items */
   }
 
   /* Star Column */
   td:nth-child(1) {
-    width: 30px; /* Fixed width */
-    min-width: 30px; /* Force width */
+    width: 30px; /* Rigid width */
+    min-width: 30px; 
     padding: 0; 
     flex-shrink: 0;
     display: flex; justify-content: center;
+    /* Ensure no overlap to the right */
+    margin-right: 4px; 
   }
 
-  /* Category Column */
+  /* Category Column (The badge) */
   td:nth-child(2) {
     width: auto; 
     padding: 0;
     flex-shrink: 0;
-    max-width: 80px; /* Limit width */
-    display: flex; 
+    /* STRICT WIDTH CONTROL */
+    max-width: 75px; 
+    overflow: hidden; /* Cut off if too big */
   }
+  
   .category-badge {
     font-size: 0.65rem; 
     padding: 3px 6px;
-    display: block;
-    overflow: hidden; text-overflow: ellipsis; /* Truncate if category name is long */
+    display: block; 
+    width: 100%;
+    /* TRUNCATION RULES */
+    white-space: nowrap;
+    overflow: hidden; 
+    text-overflow: ellipsis; 
   }
 
-  /* Service Column (The flexible one) */
+  /* Service Column (Flexible) */
   td:nth-child(3) {
-    flex: 1; /* Take all remaining space */
+    flex: 1; 
     padding: 0;
-    min-width: 0; /* Ensures truncation works */
+    min-width: 0; /* Critical for ellipsis to work */
   }
   .service-text {
     font-size: 0.9rem;
@@ -334,13 +349,13 @@ footer {
   /* Extension Column */
   td:nth-child(4) {
     width: auto; 
-    padding: 0 10px 0 10px; /* ADDED PADDING (Left/Right) */
+    padding: 0 0 0 8px; /* Extra padding on left to separate from name */
     text-align: right !important;
     flex-shrink: 0;
   }
   
   .extension-pill {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
 
   footer {
