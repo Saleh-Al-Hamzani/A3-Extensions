@@ -3,574 +3,430 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>A3 Extensions · Directory</title>
+<title>A3 Extensions Directory</title>
 <link rel="icon" type="image/png" href="logo.png">
 
 <style>
+/* UI PRINCIPLE: DESIGN TOKENS 
+   We define our colors and spacing in variables for consistency.
+   --base-size is the heart of the scaling feature.
+*/
 :root {
   --bg-dark: #020617;
-  --bg-gradient: radial-gradient(circle at top, #1f2937 0, #020617 55%, #020617 100%);
-  --card-bg: radial-gradient(circle at top left, rgba(30, 41, 59, 0.4), rgba(15,23,42, 0.6));
-  --primary: #0ea5e9;
-  --border: rgba(148, 163, 184, 0.2);
-  --text-main: #e5e7eb;
-  --text-muted: #9ca3af;
-  --font-stack: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+  --bg-surface: #0f172a;
+  --bg-surface-highlight: #1e293b;
+  
+  --primary: #38bdf8;
+  --primary-dim: rgba(56, 189, 248, 0.15);
+  
+  --text-main: #f1f5f9;
+  --text-muted: #94a3b8;
+  --border: rgba(148, 163, 184, 0.15);
+  
+  --font-stack: system-ui, -apple-system, sans-serif;
+  
+  /* THE SCALING ENGINE */
+  --base-size: 14px; /* Default size */
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 html, body {
   margin: 0;
   padding: 0;
   width: 100%;
-  overflow: hidden; /* Prevent body scroll */
-}
-
-body {
+  height: 100%;
+  overflow: hidden; /* App-like feel */
+  background-color: var(--bg-dark);
   font-family: var(--font-stack);
-  height: 100vh;
-  background: var(--bg-gradient);
   color: var(--text-main);
-  display: flex;
-  justify-content: center;
+  /* This applies the dynamic font size to the root of the document */
+  font-size: var(--base-size);
+  transition: font-size 0.2s ease; /* Smooth scaling */
 }
 
-/* ================== CONTAINER ================== */
+/* ================= LAYOUT GRID ================= */
 
-.container {
-  width: 95%;
-  max-width: 1400px;
-  height: 95vh;
-  margin: auto;
-  background: linear-gradient(145deg, rgba(15,23,42,0.9), rgba(15,23,42,0.98));
-  border-radius: 20px;
-  padding: 20px;
-  border: 1px solid var(--border);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+.app-container {
+  max-width: 1200px;
+  height: 100%;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-}
-
-/* ================== LAYOUT WRAPPER ================== */
-
-/* This wrapper holds everything but doesn't scroll itself anymore */
-.scroll-area {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden; 
-  min-height: 0; /* Crucial for nested flex scrolling */
-}
-
-/* ================== TABLE WRAPPER (SCROLLABLE) ================== */
-
-.table-wrapper {
-  flex: 1; /* Takes all remaining space */
-  overflow-y: auto; /* ONLY the table scrolls now */
-  margin-top: 8px;
-  border-radius: 12px;
+  background: radial-gradient(circle at top right, #1e293b 0%, #020617 60%);
   position: relative;
-  
-  /* Firefox Scrollbar Style */
-  scrollbar-width: thin;
-  scrollbar-color: var(--primary) transparent;
 }
 
-/* Chrome/Safari Scrollbar Style applied to the Table Wrapper */
-.table-wrapper::-webkit-scrollbar {
-  width: 6px;
-}
-.table-wrapper::-webkit-scrollbar-track {
-  background: transparent;
-}
-.table-wrapper::-webkit-scrollbar-thumb {
-  background-color: rgba(56, 189, 248, 0.3);
-  border-radius: 20px;
-}
-.table-wrapper::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(56, 189, 248, 0.5);
-}
-
-/* ================== HEADER ================== */
+/* ================= HEADER SECTION ================= */
 
 header {
+  padding: 1.5rem 1.5rem 1rem 1.5rem;
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding-bottom: 14px;
+  justify-content: space-between;
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
 }
 
-.avatar {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  border: 1px solid rgba(56, 189, 248, 0.6);
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo-frame {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 1rem;
+  background: var(--bg-surface-highlight);
+  border: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at 30% 0, #1e293b 0, #020617 70%);
-  box-shadow: 0 0 18px rgba(15, 23, 42, 0.9);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
-.avatar img {
-  width: 80%;
-  height: 80%;
-  object-fit: contain;
-}
+.logo-frame img { width: 70%; height: 70%; object-fit: contain; }
 
-.titles {
-  flex: 1;
-  text-align: center;
-}
-
-.titles h1 {
-  margin: 0;
-  font-size: 22px;
+.headings h1 {
+  font-size: 1.4rem;
   font-weight: 700;
-  letter-spacing: 0.20em;
-  text-transform: uppercase;
-  color: #f9fafb;
+  margin: 0;
+  letter-spacing: -0.02em;
+  color: #fff;
 }
-
-.titles p {
-  margin: 3px 0 0 0;
-  font-size: 12px;
+.headings p {
+  margin: 0.2rem 0 0 0;
+  font-size: 0.85rem;
   color: var(--text-muted);
 }
 
-.titles p:nth-of-type(2) {
-  font-size: 11px;
-  opacity: 0.8;
-}
-
-.status-dot {
-  margin-left: auto;
-  width: 8px;
-  height: 8px;
+.sync-status {
+  width: 0.6rem;
+  height: 0.6rem;
   border-radius: 50%;
-  background-color: #3b82f6;
+  background: var(--primary);
   opacity: 0;
   transition: opacity 0.3s;
 }
-.status-dot.active {
-  opacity: 1;
-  animation: pulse 2s infinite;
-}
-@keyframes pulse {
-  0% { opacity: 0.5; }
-  50% { opacity: 1; }
-  100% { opacity: 0.5; }
-}
+.sync-status.active { opacity: 1; animation: pulse 1.5s infinite; }
 
-/* ================== CONTROLS ================== */
+/* ================= TOOLBAR SECTION ================= */
 
-.controls-area {
-  flex-shrink: 0;
-  margin-top: 10px;
-  /* Fixed height/padding logic if needed */
+.toolbar {
+  padding: 1rem 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  background: rgba(2, 6, 23, 0.5);
+  backdrop-filter: blur(8px);
+  z-index: 20;
 }
 
-.search-wrap {
+/* Search Input */
+.search-group {
+  flex: 1;
+  min-width: 200px;
   position: relative;
-  margin-bottom: 6px;
 }
-
-.search-wrap input {
+.search-group input {
   width: 100%;
-  padding: 12px 15px 12px 40px;
-  border-radius: 999px;
+  padding: 0.75rem 1rem 0.75rem 2.8rem;
+  border-radius: 0.75rem;
   border: 1px solid var(--border);
-  font-size: 14px;
+  background: var(--bg-surface);
+  color: #fff;
+  font-size: 1rem;
   outline: none;
-  background: #0b1120;
-  color: var(--text-main);
-  transition: all 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
-
-.search-wrap input:focus {
+.search-group input:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.25);
+  box-shadow: 0 0 0 3px var(--primary-dim);
 }
-
 .search-icon {
   position: absolute;
-  left: 14px;
+  left: 1rem;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 14px;
   color: var(--text-muted);
+  font-size: 1rem;
 }
 
-.helper {
-  font-size: 12px;
-  color: var(--primary);
-  text-align: center;
-  font-weight: 600;
-}
-
-.fav-toggle-bar {
+/* Controls Group (Filters + Text Size) */
+.controls-group {
   display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 10px;
+  gap: 0.8rem;
+  align-items: center;
 }
 
-.fav-filter {
-  border-radius: 12px;
-  padding: 6px 14px;
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  border: 1px solid rgba(255,255,255,0.1);
-  background: rgba(15,23,42, 0.7);
-  color: #94a3b8;
-  transition: all 0.2s ease;
-  backdrop-filter: blur(10px);
+/* Button Reset */
+.btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 0.6rem 1rem;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.btn:hover { background: var(--bg-surface-highlight); color: #fff; }
+.btn.active {
+  background: var(--primary-dim);
+  color: var(--primary);
+  border-color: rgba(56, 189, 248, 0.4);
 }
 
-.fav-filter:hover {
-  background: rgba(14,165,233,0.15);
-  color: #fff;
+/* Text Size Stepper */
+.size-stepper {
+  display: flex;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  overflow: hidden;
+}
+.size-btn {
+  background: transparent;
+  border: none;
+  padding: 0.6rem 0.8rem;
+  color: var(--text-main);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+.size-btn:hover { background: var(--bg-surface-highlight); }
+.size-label {
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  padding: 0.6rem 0.6rem;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  user-select: none;
 }
 
-.fav-filter.active {
-  background: linear-gradient(145deg, rgba(14,165,233,.25), rgba(2,6,23,.9));
-  color: #38bdf8;
-  border-color: rgba(56,189,248,.4);
-  box-shadow: inset 0 0 8px rgba(56,189,248,.3);
+/* RRT Info Badge */
+.info-badge {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  background: var(--primary-dim);
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  white-space: nowrap;
+}
+.info-badge strong { color: var(--primary); }
+
+/* ================= DATA VIEW (Scrollable) ================= */
+
+.data-view {
+  flex: 1;
+  overflow: hidden; /* Container doesn't scroll */
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
-/* ================== TABLE STYLING ================== */
+.table-scroll {
+  flex: 1;
+  overflow-y: auto; /* Internal Scroll */
+  padding: 0 1.5rem;
+  
+  /* Scrollbar Styling */
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.table-scroll::-webkit-scrollbar { width: 6px; }
+.table-scroll::-webkit-scrollbar-track { background: transparent; }
+.table-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
 
 table {
   width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed;
+  border-collapse: separate; 
+  border-spacing: 0;
+  margin-bottom: 2rem;
 }
 
-/* Sticky Header Logic */
 thead {
-  background: #0f172a;
   position: sticky;
   top: 0;
-  z-index: 10; /* Ensures it stays above the data */
-  box-shadow: 0 1px 0 var(--border);
+  background: var(--bg-dark); /* Matches body bg for seamless stickiness */
+  z-index: 10;
+}
+/* A visual trick to create a line under sticky header */
+thead::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  border-bottom: 1px solid var(--border);
 }
 
 th {
   text-align: left;
-  padding: 12px 10px;
-  font-size: 11px;
+  padding: 1rem 0.5rem;
+  font-size: 0.8rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.10em;
+  letter-spacing: 0.05em;
   color: var(--text-muted);
-  background: #0f172a; /* Required for sticky to hide scrolling content */
-}
-
-th.fav-col {
-  width: 40px;
-  text-align: center;
-}
-
-th.sortable {
-  position: relative;
   cursor: pointer;
-  padding-right: 18px;
+  user-select: none;
 }
-th.sortable::after {
-  content: '';
-  position: absolute;
-  right: 6px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 10px;
-  opacity: 0.45;
-}
-th.sortable.sort-asc::after {
-  content: '▲';
-}
-th.sortable.sort-desc::after {
-  content: '▼';
-}
+th:hover { color: var(--text-main); }
 
 td {
-  padding: 10px 10px;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+  padding: 1rem 0.5rem;
+  border-bottom: 1px solid var(--border);
   vertical-align: middle;
-  font-size: 13px;
-  color: var(--text-main);
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
-/* ================== CONTENT CELLS ================== */
+/* Row Animation */
+tbody tr { animation: fadeIn 0.3s ease forwards; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-.category-pill {
+/* Cell Content Styling */
+.category-tag {
   display: inline-block;
-  padding: 3px 8px;
-  border-radius: 999px;
-  font-size: 9px;
+  font-size: 0.75rem;
   font-weight: 600;
-  text-transform: uppercase;
+  padding: 0.3em 0.8em;
+  background: var(--bg-surface-highlight);
   color: #cbd5e1;
-  background: rgba(30, 41, 59, 0.7);
-  white-space: normal;
-  overflow: visible;
-  text-overflow: clip;
-  max-width: none;
+  border-radius: 0.4rem;
 }
 
-.service-cell {
-  vertical-align: middle;
+.service-text {
+  font-weight: 500;
+  color: var(--text-main);
+  font-size: 1rem;
 }
 
-.service-name {
-  display: block;
-  font-weight: 600;
-  color: #f3f4f6;
-  white-space: normal;
-  word-break: break-word;
-}
-
-.ext-number {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+.ext-badge {
+  font-family: 'SF Mono', 'Menlo', monospace;
+  font-size: 0.9rem;
   font-weight: 700;
   color: var(--primary);
   background: rgba(14, 165, 233, 0.1);
-  padding: 4px 10px;
-  border-radius: 8px;
-  white-space: nowrap;
+  padding: 0.4em 0.8em;
+  border-radius: 0.4rem;
+  display: inline-block;
 }
 
 .fav-btn {
+  background: none;
   border: none;
-  background: transparent;
+  font-size: 1.2rem;
+  color: #334155;
   cursor: pointer;
-  font-size: 16px;
-  line-height: 1;
-  padding: 0;
-  color: #4b5563;
+  transition: color 0.2s;
 }
-.fav-btn.active {
-  color: #facc15;
-  text-shadow: 0 0 6px rgba(250, 204, 21, 0.7);
-}
+.fav-btn.active { color: #eab308; }
+.fav-btn:hover { transform: scale(1.2); }
 
-/* ================== FOOTER ================== */
+/* ================= FOOTER ================= */
 
-.footer {
-  flex-shrink: 0;
-  margin-top: 10px;
-  padding-top: 10px;
+footer {
+  padding: 1rem 1.5rem;
   border-top: 1px solid var(--border);
   display: flex;
   justify-content: space-between;
-  font-size: 10px;
+  align-items: center;
+  font-size: 0.75rem;
   color: var(--text-muted);
-}
-.tag {
-  padding: 2px 8px;
-  border-radius: 999px;
-  border: 1px solid rgba(56, 189, 248, 0.3);
-  color: var(--primary);
+  background: var(--bg-surface);
 }
 
-/* ================== MOBILE ================== */
-
+/* ================= MOBILE ADAPTATION ================= */
 @media (max-width: 768px) {
-
-  body {
-    overflow-x: hidden;
-    overflow-y: hidden;
-    display: block;
-  }
-
-  .container {
-    width: 100%;
-    height: 100dvh;
-    padding: 4px 12px 10px;
-    border-radius: 0;
-    margin: 0 auto;
-  }
-
-  /* On mobile, we still want internal scrolling for table */
-  .table-wrapper {
-    overscroll-behavior: contain;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  header {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    margin-bottom: 6px;
-    padding-bottom: 4px;
-  }
-
-  .avatar img {
-    width: 64px;
-    height: 64px;
-  }
-
-  .titles h1 {
-    font-size: 14px;
-    letter-spacing: 0.14em;
-    margin-bottom: 2px;
-    white-space: nowrap;
-  }
-
-  .titles p {
-    font-size: 11px;
-    margin: 0;
-  }
-
-  .search-wrap {
-    margin-top: 4px;
-    margin-bottom: 2px;
-  }
-
-  .search-wrap input {
-    font-size: 14px;
-    padding: 9px 14px 9px 38px;
-  }
-
-  .helper {
-    margin-top: 0;
-  }
-
-  .fav-toggle-bar {
-    justify-content: center;
-    margin-top: 4px;
-  }
-
-  .fav-filter {
-    font-size: 10px;
-    padding: 4px 12px;
-  }
-
-  .controls-area {
-    /* Mobile sticky removed because the whole top area is now static */
-    position: relative; 
-    top: auto;
-    z-index: auto;
-    background: transparent;
-    padding-bottom: 4px;
-  }
-
-  table {
-    table-layout: auto;
-  }
-
-  th {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  td {
-    vertical-align: middle;
-    padding: 8px 6px;
-  }
-
-  .category-pill {
-    max-width: 90px;
-    display: inline-block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 9px;
-  }
-
-  .ext-number {
-    display: inline-block;
-    font-size: 12px;
-    padding: 0.3em 0.6em;
-    border-radius: 10px;
-    white-space: nowrap;
-    margin: 0 auto;
-  }
-
-  td:last-child {
-    min-width: 80px;
-    text-align: center;
-  }
-
-  .service-name {
-    display: block;
-    font-size: 9px;
-    line-height: 1.25;
-    white-space: normal;
-    word-break: break-word;
-    overflow: visible;
-    text-overflow: clip;
-  }
-
-  .fav-col {
-    width: 30px;
-  }
+  header { padding: 1rem; flex-direction: column; gap: 1rem; text-align: center; }
+  .brand { flex-direction: column; gap: 0.5rem; }
+  .logo-frame { width: 3rem; height: 3rem; }
+  
+  .toolbar { padding: 0.8rem 1rem; flex-direction: column; align-items: stretch; gap: 0.8rem; }
+  .controls-group { justify-content: space-between; }
+  
+  .table-scroll { padding: 0 1rem; }
+  
+  /* On Mobile, convert table to cards if simpler, or keep scroll */
+  /* Keeping scroll as requested, but shrinking fonts slightly via JS logic */
 }
+
+@keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
+
 </style>
 </head>
 <body>
 
-<div class="container">
+<div class="app-container">
 
-  <div class="scroll-area">
-    <header>
-      <div class="avatar">
-        <img src="logo.png" alt="logo" width="50" height="50">
+  <header>
+    <div class="brand">
+      <div class="logo-frame">
+        <img src="logo.png" alt="A3">
       </div>
-      <div class="titles" style="text-align:center; width:100%;">
-        <h1>A3 INTERNAL EXTENSIONS</h1>
-        <p>For internal A3 use at King Faisal Specialist Hospital</p>
-        <p style="font-size:11px;opacity:0.7;">Created by F1520110 – Nawaf Alshammari</p>
+      <div class="headings">
+        <h1>A3 Extensions</h1>
+        <p>Created by F1520110 – Nawaf Alshammari</p>
       </div>
-      <div id="sync-indicator" class="status-dot"></div>
-    </header>
+    </div>
+    <div id="sync-indicator" class="sync-status"></div>
+  </header>
 
-    <div class="controls-area">
-      <div class="search-wrap">
-        <span class="search-icon">🔍</span>
-        <input id="search" type="search" placeholder="Search..." autocomplete="off">
-      </div>
+  <section class="toolbar">
+    <div class="search-group">
+      <span class="search-icon">🔍</span>
+      <input id="search" type="search" placeholder="Search service, category..." autocomplete="off">
+    </div>
 
-      <div class="helper">
-        RRT Extensions | Adult: <strong>49337</strong>&nbsp;&nbsp; Pediatric: <strong>45381</strong>
-      </div>
+    <div class="controls-group">
+      <button id="filter-all" class="btn active">All</button>
+      <button id="filter-fav" class="btn">★ Favorites</button>
 
-      <div class="fav-toggle-bar">
-        <button id="filter-all" class="fav-filter active">All</button>
-        <button id="filter-fav" class="fav-filter">Favorites</button>
+      <div class="size-stepper">
+        <button class="size-btn" onclick="changeSize(-1)" title="Decrease Size">A-</button>
+        <div class="size-label">SIZE</div>
+        <button class="size-btn" onclick="changeSize(1)" title="Increase Size">A+</button>
       </div>
     </div>
 
-    <div class="table-wrapper">
+    <div class="info-badge">
+      RRT: Adult <strong>49337</strong> • Ped <strong>45381</strong>
+    </div>
+  </section>
+
+  <main class="data-view">
+    <div class="table-scroll">
       <table>
         <thead>
           <tr>
-            <th class="fav-col">★</th>
+            <th width="50" style="text-align:center">★</th>
             <th class="sortable" data-col="category">Category</th>
             <th class="sortable" data-col="service">Service</th>
-            <th class="sortable" data-col="extension">Extension</th>
+            <th class="sortable" data-col="extension">Ext</th>
           </tr>
         </thead>
         <tbody id="tbody"></tbody>
       </table>
     </div>
-  </div>
+  </main>
 
-  <div class="footer">
-    <span>This project is a personal initiative and is not an official hospital system.</span>
-    <span class="tag">LIVE</span>
-  </div>
+  <footer>
+    <span>Not an official hospital system. Internal use only.</span>
+    <span style="color:var(--primary); font-weight:700; font-size:0.7rem; border:1px solid var(--primary-dim); padding:2px 6px; border-radius:4px;">LIVE V2.0</span>
+  </footer>
 
 </div>
 
 <script>
+// --- CORE VARIABLES ---
 const tbody       = document.getElementById('tbody');
 const searchInput = document.getElementById('search');
 const btnAll      = document.getElementById('filter-all');
@@ -578,17 +434,42 @@ const btnFav      = document.getElementById('filter-fav');
 const syncDot     = document.getElementById('sync-indicator');
 const sortHeaders = document.querySelectorAll('th.sortable');
 
-const STORAGE_KEY_DATA = 'a3_directory_data_v1';
+const STORAGE_KEY_DATA = 'a3_directory_data_v2'; // Changed key for v2 structure
 const STORAGE_KEY_FAV  = 'a3_directory_favorites_v1';
+const STORAGE_KEY_SIZE = 'a3_ui_size';
 
 let data = [];
 let favorites = new Set();
 let currentView = 'all';
+let sortState = { column: null, dir: 1 };
 
-let sortState = {
-  column: null,
-  dir: 1
-};
+// --- TEXT SCALING ENGINE ---
+let baseFontSize = 14; // Default pixels
+
+function initSize() {
+  const savedSize = localStorage.getItem(STORAGE_KEY_SIZE);
+  if (savedSize) {
+    baseFontSize = parseInt(savedSize);
+  }
+  applySize();
+}
+
+function changeSize(amount) {
+  baseFontSize += amount;
+  // Limits: Min 10px, Max 22px
+  if (baseFontSize < 10) baseFontSize = 10;
+  if (baseFontSize > 22) baseFontSize = 22;
+  
+  applySize();
+  localStorage.setItem(STORAGE_KEY_SIZE, baseFontSize);
+}
+
+function applySize() {
+  // Update the CSS variable --base-size
+  document.documentElement.style.setProperty('--base-size', baseFontSize + 'px');
+}
+
+// --- DATA LOGIC ---
 
 function makeKey(row) {
   return `${row.category}||${row.service}||${row.extension}`;
@@ -598,39 +479,30 @@ function loadFavorites() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY_FAV);
     if (raw) favorites = new Set(JSON.parse(raw));
-  } catch (e) {
-    favorites = new Set();
-  }
+  } catch (e) { favorites = new Set(); }
 }
 
 function saveFavorites() {
   localStorage.setItem(STORAGE_KEY_FAV, JSON.stringify(Array.from(favorites)));
 }
 
-function escapeRegex(str) {
-  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
+function escapeRegex(str) { return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
 
 function getFilteredData() {
   const q = searchInput.value.toLowerCase().trim();
   let re = null;
-  if (q) {
-    re = new RegExp('\\b' + escapeRegex(q));
-  }
+  if (q) re = new RegExp('\\b' + escapeRegex(q));
 
   return data.filter(row => {
-    const inView =
-      currentView === 'all' ||
-      (currentView === 'fav' && favorites.has(makeKey(row)));
-
+    const key = makeKey(row);
+    const inView = currentView === 'all' || (currentView === 'fav' && favorites.has(key));
+    
     if (!inView) return false;
     if (!q) return true;
 
-    const cat = String(row.category || '').toLowerCase();
-    const svc = String(row.service || '').toLowerCase();
-    const ext = String(row.extension || '').toLowerCase();
-
-    return re.test(cat) || re.test(svc) || re.test(ext);
+    return (re.test((row.category||'').toLowerCase()) || 
+            re.test((row.service||'').toLowerCase()) || 
+            re.test((row.extension||'').toLowerCase()));
   });
 }
 
@@ -639,10 +511,9 @@ function applySort(list) {
   const col = sortState.column;
   const dir = sortState.dir;
 
-  const sorted = [...list].sort((a, b) => {
+  return [...list].sort((a, b) => {
     let va = a[col] ?? '';
     let vb = b[col] ?? '';
-
     if (col === 'extension') {
       va = parseInt(va, 10) || 0;
       vb = parseInt(vb, 10) || 0;
@@ -650,61 +521,42 @@ function applySort(list) {
       va = va.toString().toLowerCase();
       vb = vb.toString().toLowerCase();
     }
-
-    if (va < vb) return -1 * dir;
-    if (va > vb) return  1 * dir;
-    return 0;
+    return (va < vb ? -1 : 1) * dir;
   });
-
-  return sorted;
 }
 
 function renderRows(list) {
   tbody.innerHTML = "";
   if (!list.length) {
-    tbody.innerHTML =
-      `<tr><td colspan="4" style="text-align:center; padding:40px; color:#9ca3af;">No results found.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:3rem; color:var(--text-muted);">No results found.</td></tr>`;
     return;
   }
 
+  const fragment = document.createDocumentFragment();
+  
   list.forEach(row => {
-    const key   = makeKey(row);
+    const key = makeKey(row);
     const isFav = favorites.has(key);
-
+    
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td style="text-align:center;">
-        <button class="fav-btn${isFav ? ' active' : ''}" data-key="${key}" aria-label="Toggle favorite">
-          ★
-        </button>
+        <button class="fav-btn${isFav ? ' active' : ''}" data-key="${key}">★</button>
       </td>
-      <td><span class="category-pill">${row.category || ''}</span></td>
-      <td class="service-cell"><span class="service-name">${row.service || ''}</span></td>
-      <td><span class="ext-number">${row.extension || ''}</span></td>
+      <td><span class="category-tag">${row.category || ''}</span></td>
+      <td><span class="service-text">${row.service || ''}</span></td>
+      <td><span class="ext-badge">${row.extension || ''}</span></td>
     `;
-    tbody.appendChild(tr);
+    fragment.appendChild(tr);
   });
+  
+  tbody.appendChild(fragment);
 }
 
-function updateSortIndicators() {
-  sortHeaders.forEach(th => {
-    th.classList.remove('sort-asc', 'sort-desc');
-    const col = th.dataset.col;
-    if (col === sortState.column) {
-      th.classList.add(sortState.dir === 1 ? 'sort-asc' : 'sort-desc');
-    }
-  });
-}
-
-function updateView() {
-  const filtered = getFilteredData();
-  const sorted   = applySort(filtered);
-  renderRows(sorted);
-}
+// --- EVENT LISTENERS ---
 
 tbody.addEventListener('click', (e) => {
   if (!e.target.classList.contains('fav-btn')) return;
-
   const key = e.target.getAttribute('data-key');
   if (favorites.has(key)) {
     favorites.delete(key);
@@ -714,6 +566,8 @@ tbody.addEventListener('click', (e) => {
     e.target.classList.add('active');
   }
   saveFavorites();
+  // Remove from view immediately if in Fav view
+  if(currentView === 'fav') updateView();
 });
 
 btnAll.addEventListener('click', () => {
@@ -730,56 +584,51 @@ btnFav.addEventListener('click', () => {
   updateView();
 });
 
-searchInput.addEventListener('input', () => {
-  updateView();
-});
+searchInput.addEventListener('input', updateView);
 
 sortHeaders.forEach(th => {
   th.addEventListener('click', () => {
     const col = th.dataset.col;
-    if (!col) return;
-
     if (sortState.column === col) {
       sortState.dir *= -1;
     } else {
       sortState.column = col;
       sortState.dir = 1;
     }
-    updateSortIndicators();
     updateView();
   });
 });
 
+function updateView() {
+  const filtered = getFilteredData();
+  const sorted = applySort(filtered);
+  renderRows(sorted);
+}
+
+// --- SYNC ---
+
 function callback(response) {
   const prev = localStorage.getItem(STORAGE_KEY_DATA);
   const next = JSON.stringify(response);
-
   syncDot.classList.remove('active');
-
   if (prev !== next) {
     localStorage.setItem(STORAGE_KEY_DATA, next);
     data = response;
   } else if (!data.length) {
     data = response;
   }
-
   updateView();
 }
 
 function loadData() {
   syncDot.classList.add('active');
-
   loadFavorites();
+  initSize(); // Init text size
 
   const cached = localStorage.getItem(STORAGE_KEY_DATA);
   if (cached) {
-    try {
-      data = JSON.parse(cached) || [];
-    } catch (e) {
-      data = [];
-    }
+    try { data = JSON.parse(cached) || []; } catch(e){ data=[]; }
   }
-
   updateView();
 
   const script = document.createElement('script');
