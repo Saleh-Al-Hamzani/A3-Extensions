@@ -341,7 +341,7 @@ footer {
         <div style="width:1px; background:var(--glass-border); margin:0 4px;"></div>
         <button class="icon-btn" onclick="resize(-1)">A-</button>
         <button class="icon-btn" onclick="resize(1)">A+</button>
-      </div>
+
     </div>
   </header>
 
@@ -350,7 +350,7 @@ footer {
       <table>
         <thead>
           <tr>
-            <th width="50" style="text-align:center">★</th>
+            <th width="50" style="text-align:center"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></th>
             <th class="sortable" data-col="category" width="25%">Category</th>
             <th class="sortable" data-col="service">Service</th>
             <th class="sortable" data-col="extension" style="text-align:right" width="150">Extension</th>
@@ -361,8 +361,8 @@ footer {
     </div>
   </div>
 
-  <footer>
-    <div style="opacity:0.6">Created by F1520110 — Nawaf Alshammari</div>
+   <footer>
+    <div style="opacity:0.6">This project is a personal initiative and is not an official hospital system.</div>
     <div class="sync-indicator">
       LIVE <span id="sync-dot" class="live-dot"></span>
     </div>
@@ -372,9 +372,9 @@ footer {
 
 <script>
 // --- CONFIG & STATE ---
-const STORAGE_KEY_DATA = 'a3_data_v5'; // Bumped version
-const STORAGE_KEY_FAV  = 'a3_fav_v5';
-const STORAGE_KEY_SIZE = 'a3_size_v5';
+const STORAGE_KEY_DATA = 'a3_data_v4';
+const STORAGE_KEY_FAV  = 'a3_fav_v4';
+const STORAGE_KEY_SIZE = 'a3_size_v4';
 
 let data = [];
 let favorites = new Set();
@@ -389,8 +389,12 @@ const btnAll = document.getElementById('filter-all');
 const btnFav = document.getElementById('filter-fav');
 const syncDot = document.getElementById('sync-dot');
 
-function escapeRegex(str) { return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+// --- HELPER FOR REGEX ---
+function escapeRegex(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 
+// --- INIT ---
 function init() {
   const s = localStorage.getItem(STORAGE_KEY_SIZE);
   if(s) baseSize = parseInt(s);
@@ -408,6 +412,7 @@ function init() {
   fetchData();
 }
 
+// --- LOGIC ---
 function resize(delta) {
   baseSize += delta;
   if(baseSize < 12) baseSize = 12;
@@ -421,8 +426,7 @@ function applySize() {
 }
 
 function fetchData() {
-  syncDot.style.opacity = '0.3';
-  syncDot.style.boxShadow = 'none';
+  syncDot.style.opacity = '0.4';
   const script = document.createElement('script');
   script.src = "https://script.google.com/macros/s/AKfycby9t71TVzAJyzRDczYYtLh7oIIq9J4jEvyddy7Bc-BAunFMTuYEwerlscLHjfKw0orA/exec";
   document.body.appendChild(script);
@@ -430,7 +434,6 @@ function fetchData() {
 
 function callback(response) {
   syncDot.style.opacity = '1';
-  syncDot.style.boxShadow = '0 0 8px #22c55e';
   const prev = localStorage.getItem(STORAGE_KEY_DATA);
   const next = JSON.stringify(response);
   if(prev !== next) {
@@ -447,17 +450,19 @@ function render() {
   tbody.innerHTML = '';
   const q = searchInput.value.toLowerCase().trim();
   let re = null;
-  if (q) re = new RegExp(escapeRegex(q));
+  if (q) {
+    re = new RegExp('\\b' + escapeRegex(q));
+  }
   
   let list = data.filter(row => {
     const key = makeKey(row);
     if(currentView === 'fav' && !favorites.has(key)) return false;
     if(!q) return true;
     
-    // Search logic
     const cat = String(row.category || '').toLowerCase();
     const svc = String(row.service || '').toLowerCase();
     const ext = String(row.extension || '').toLowerCase();
+
     return re.test(cat) || re.test(svc) || re.test(ext);
   });
 
@@ -473,9 +478,7 @@ function render() {
   }
 
   if(list.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:4rem 1rem; color:var(--text-dim); font-style:italic;">
-        ${currentView === 'fav' ? 'No favorites added yet.' : 'No matches found.'}
-    </td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:3rem; color:var(--text-muted)">No results found</td></tr>`;
     return;
   }
 
@@ -484,16 +487,15 @@ function render() {
     const key = makeKey(row);
     const isFav = favorites.has(key);
     const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td style="text-align:center">
-        <button class="fav-star ${isFav?'active':''}" onclick="toggleFav('${key}')">
-            ${isFav ? '★' : '☆'}
-        </button>
-      </td>
-      <td><span class="category-badge">${row.category||''}</span></td>
-      <td><div class="service-text">${row.service||''}</div></td>
-      <td style="text-align:right"><span class="extension-pill">${row.extension||''}</span></td>
-    `;
+   tr.innerHTML = `
+  <td style="text-align:center">
+    <button class="fav-star ${isFav ? 'active' : ''}" onclick="toggleFav('${key}')">★</button>
+  </td>
+  <td><span class="category-badge">${row.category || ''}</span></td>
+  <td><span class="service-text">${row.service || ''}</span></td>
+  <td style="text-align:right"><span class="extension-pill">${row.extension || ''}</span></td>
+`;
+
     frag.appendChild(tr);
   });
   tbody.appendChild(frag);
@@ -529,5 +531,6 @@ document.querySelectorAll('.sortable').forEach(th => {
 
 init();
 </script>
+
 </body>
 </html>
