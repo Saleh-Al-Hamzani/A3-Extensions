@@ -223,11 +223,15 @@ td {
   color: var(--text-muted);
   padding: 4px 10px; border-radius: 6px;
   font-size: 0.75rem; font-weight: 600; letter-spacing: 0.02em;
+  white-space: nowrap; /* Prevent badge from breaking */
 }
 
 .service-text {
   font-weight: 500; color: #e2e8f0; font-size: 0.95rem;
   display: block;
+  white-space: nowrap; /* Keep text on one line */
+  overflow: hidden;    /* Cut off extra text */
+  text-overflow: ellipsis; /* Add ... */
 }
 
 .extension-pill {
@@ -278,75 +282,65 @@ footer {
   .search-wrapper { width: 100%; }
   .action-bar { width: 100%; justify-content: center; }
 
-  .content-wrapper { padding: 0 1rem; }
-  .table-scroll-area { overflow-x: hidden; } /* Prevent horizontal scroll, force stack */
+  .content-wrapper { padding: 0; } /* Remove padding for edge-to-edge feel */
+  .table-scroll-area { 
+    overflow-x: hidden; 
+    border-radius: 0;
+  } 
 
-  /* 2. Transform Table to Cards */
-  thead { display: none; } /* Hide headers */
-
-  table, tbody, tr, td {
-    display: block;
-    width: 100%;
-  }
+  /* 2. ONE LINE LAYOUT FOR MOBILE */
+  
+  /* Hide headers as they take too much space, or we can keep them if minimal */
+  thead { display: none; } 
 
   tbody tr {
-    background: rgba(30, 41, 59, 0.2);
-    border: 1px solid var(--glass-border);
-    border-radius: 12px;
-    margin-bottom: 12px;
-    padding: 12px;
-    position: relative;
-    /* Grid Layout for the Card */
-    display: grid;
-    grid-template-areas: 
-      "star service"
-      "badge ext";
-    grid-template-columns: 40px 1fr;
-    gap: 8px;
+    display: flex; /* Force horizontal layout */
     align-items: center;
-  }
-  
-  /* Reset default TD styles */
-  td {
-    padding: 0;
-    border: none;
-    text-align: left;
+    width: 100%;
+    padding: 12px 10px; /* Comfortable touch target */
+    border-bottom: 1px solid var(--glass-border);
+    gap: 8px; /* Space between items */
   }
 
-  /* Assign Grid Areas */
   /* Star Column */
-  td:nth-child(1) { 
-    grid-area: star; 
-    display: flex; justify-content: center; 
+  td:nth-child(1) {
+    width: 24px; padding: 0; 
+    flex-shrink: 0; /* Never shrink */
+    display: flex; justify-content: center;
   }
-  
+
   /* Category Column */
-  td:nth-child(2) { 
-    grid-area: badge; 
+  td:nth-child(2) {
+    width: auto; padding: 0;
+    flex-shrink: 0;
   }
-  
-  /* Service Column */
-  td:nth-child(3) { 
-    grid-area: service;
-    font-size: 1.1rem;
-    font-weight: 600;
-  }
-  
-  /* Extension Column */
-  td:nth-child(4) { 
-    grid-area: ext;
-    text-align: right !important; /* Force align right */
-    justify-self: end;
-  }
-  
-  /* Styling tweaks for card look */
   .category-badge {
-    font-size: 0.7rem;
-    background: rgba(255,255,255,0.05);
+    font-size: 0.65rem; /* Smaller text */
+    padding: 3px 6px;
+    max-width: 80px; /* Limit width */
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Service Column (The flexible one) */
+  td:nth-child(3) {
+    flex: 1; /* Take all remaining space */
+    padding: 0;
+    min-width: 0; /* Crucial for text-overflow to work inside flex */
+  }
+  .service-text {
+    font-size: 0.85rem;
+  }
+
+  /* Extension Column */
+  td:nth-child(4) {
+    width: auto; padding: 0;
+    text-align: right !important;
+    flex-shrink: 0;
   }
   
   .extension-pill {
-    font-size: 1.1rem;
+    font-size: 0.85rem;
   }
 
   /* Footer Adjustment */
