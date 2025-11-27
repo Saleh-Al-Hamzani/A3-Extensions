@@ -12,31 +12,22 @@
 <style>
 /* --- MODERN 2025 VARIABLES --- */
 :root {
-  /* Deep Space Slate Palette */
   --bg-deep: #030712;
   --bg-subtle: #0f172a;
-  
-  /* Glassmorphism Variables */
   --glass-surface: rgba(17, 24, 39, 0.7);
   --glass-border: rgba(255, 255, 255, 0.08);
   --glass-highlight: rgba(255, 255, 255, 0.03);
   
-  /* Brand Colors */
-  --primary: #38bdf8;         /* Sky 400 */
-  --primary-dim: #0ea5e9;     /* Sky 500 */
-  --primary-glow: rgba(56, 189, 248, 0.15);
-  
-  --accent-red: #f43f5e;      /* Rose 500 */
+  --primary: #38bdf8;
+  --primary-dim: #0ea5e9;
+  --accent-red: #f43f5e;
   --accent-red-bg: rgba(244, 63, 94, 0.1);
   
-  /* Typography */
   --text-main: #f1f5f9;
   --text-muted: #94a3b8;
   --text-dim: #64748b;
   
   --font-stack: 'Inter', system-ui, -apple-system, sans-serif;
-  
-  /* Functionality */
   --base-size: 14px; 
   --ease-spring: cubic-bezier(0.4, 0.0, 0.2, 1);
 }
@@ -44,7 +35,8 @@
 * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
 
 html {
-  margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden;
+  margin: 0; padding: 0; width: 100%; height: 100%; 
+  overflow: hidden; /* Prevent page scroll, only content area scrolls */
   font-size: var(--base-size);
   transition: font-size 0.2s var(--ease-spring);
   background-color: var(--bg-deep);
@@ -57,26 +49,28 @@ body {
   background: radial-gradient(circle at 50% -20%, #1e293b 0%, #030712 60%);
   display: flex;
   justify-content: center;
+  overflow: hidden; /* Double safety */
 }
 
 /* --- APP SHELL --- */
 .app-container {
   width: 100%; max-width: 1400px; height: 100%;
   display: flex; flex-direction: column; position: relative;
+  overflow: hidden; /* Ensures nothing spills out of the app frame */
 }
 
-/* --- MODERN HEADER (Bento Grid Style) --- */
+/* --- HEADER --- */
 header {
   flex-shrink: 0;
   padding: 1.5rem 2rem;
   z-index: 50;
   display: grid;
-  grid-template-columns: auto 1fr auto; /* Logo | Search/Stats | Tools */
+  grid-template-columns: auto 1fr auto; 
   gap: 1.5rem;
   align-items: center;
 }
 
-/* 1. Identity Block */
+/* Identity Block */
 .brand-area { display: flex; align-items: center; gap: 1rem; }
 .logo-box {
   width: 3.5rem; height: 3.5rem;
@@ -88,10 +82,6 @@ header {
   position: relative; overflow: hidden;
   flex-shrink: 0;
 }
-.logo-box::after {
-  content:''; position: absolute; top:0; left:0; right:0; bottom:0;
-  background: radial-gradient(circle at top right, rgba(56,189,248,0.2), transparent 70%);
-}
 .logo-box img { width: 60%; height: 60%; object-fit: contain; position: relative; z-index: 2; }
 
 .titles h1 {
@@ -102,17 +92,16 @@ header {
 }
 .titles p { margin: 0; font-size: 0.8rem; color: var(--text-dim); margin-top: 2px; white-space: nowrap;}
 
-/* 2. Middle Stats (RRT) */
+/* Middle Stats */
 .mid-section {
   display: flex; flex-direction: column; gap: 0.8rem; align-items: center; justify-content: center;
 }
-
 .rrt-card {
   display: flex; align-items: center; gap: 1.5rem;
   background: var(--glass-surface);
   border: 1px solid var(--glass-border);
   padding: 0.6rem 1.2rem;
-  border-radius: 99px; /* Pill shape */
+  border-radius: 99px;
   backdrop-filter: blur(8px);
   box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
@@ -128,11 +117,13 @@ header {
 }
 @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
-/* 3. Controls (Search & Filters) */
+/* Controls */
 .controls-area { display: flex; align-items: center; gap: 1rem; }
 
 .search-wrapper {
   position: relative; width: 300px;
+  /* Fix: prevent search from breaking container on zoom */
+  max-width: 100%; 
 }
 .search-wrapper input {
   width: 100%;
@@ -153,7 +144,7 @@ header {
   color: var(--text-dim); font-size: 0.9rem; pointer-events: none;
 }
 
-.action-bar { display: flex; gap: 8px; }
+.action-bar { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end;}
 .icon-btn {
   background: transparent; border: 1px solid var(--glass-border);
   color: var(--text-muted);
@@ -180,7 +171,6 @@ header {
 .table-scroll-area {
   flex: 1; overflow-y: auto;
   border-radius: 16px 16px 0 0;
-  /* Scrollbar Styling */
   scrollbar-width: thin; scrollbar-color: var(--glass-border) transparent;
 }
 .table-scroll-area::-webkit-scrollbar { width: 6px; }
@@ -191,7 +181,7 @@ table { width: 100%; border-collapse: separate; border-spacing: 0 4px; }
 
 thead th {
   position: sticky; top: 0; z-index: 10;
-  background: var(--bg-deep); /* Hides scrolling content behind */
+  background: var(--bg-deep); 
   text-align: left; padding: 1rem 1.5rem;
   font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em;
   color: var(--text-dim);
@@ -205,9 +195,7 @@ tbody tr {
   background: transparent;
   transition: transform 0.1s, background 0.2s;
 }
-tbody tr:hover {
-  background: var(--glass-highlight);
-}
+tbody tr:hover { background: var(--glass-highlight); }
 
 td {
   padding: 0.8rem 1.5rem;
@@ -217,15 +205,14 @@ td {
 
 /* Data Styling */
 .category-badge {
-  display: inline-block; /* Changed to block for text-overflow to work */
-  align-items: center;
+  display: inline-block;
   background: rgba(30, 41, 59, 0.5);
   border: 1px solid rgba(255,255,255,0.05);
   color: var(--text-muted);
   padding: 4px 10px; border-radius: 6px;
   font-size: 0.75rem; font-weight: 600; letter-spacing: 0.02em;
   white-space: nowrap; 
-  max-width: 100%; /* Default safe width */
+  max-width: 100%; 
 }
 
 .service-text {
@@ -236,7 +223,6 @@ td {
   text-overflow: ellipsis; 
 }
 
-/* Extension Pill with Background */
 .extension-pill {
   font-family: 'SF Mono', 'Roboto Mono', monospace;
   font-weight: 600; font-size: 0.95rem;
@@ -265,34 +251,43 @@ footer {
   font-size: 0.75rem; color: var(--text-dim);
   background: rgba(3, 7, 18, 0.95);
 }
-.sync-indicator {
-  display: flex; align-items: center; gap: 8px; font-weight: 600; letter-spacing: 0.05em; color: var(--text-muted);
-}
-.live-dot {
-  width: 6px; height: 6px; background: #22c55e; border-radius: 50%;
-  box-shadow: 0 0 8px #22c55e;
-}
+.sync-indicator { display: flex; align-items: center; gap: 8px; font-weight: 600; letter-spacing: 0.05em; color: var(--text-muted); }
+.live-dot { width: 6px; height: 6px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 8px #22c55e; }
 
 /* --- RESPONSIVE / MOBILE / TABLET FIX --- */
 @media (max-width: 900px) {
-  /* 1. Header Layout */
+  /* 1. Header Layout - Make robust for Zoom */
   header {
     display: flex; flex-direction: column;
     align-items: center; text-align: center;
-    padding: 1rem; gap: 1rem;
+    padding: 1rem 1rem; 
+    gap: 1rem;
+    width: 100%;
+    overflow: hidden; /* Prevent spill */
   }
   
   .brand-area { width: 100%; justify-content: center; }
   .mid-section { width: 100%; }
-  .controls-area { width: 100%; flex-direction: column; gap: 0.8rem; }
-  .search-wrapper { width: 100%; }
-  .action-bar { width: 100%; justify-content: center; }
-
-  .content-wrapper { padding: 0; }
-  .table-scroll-area { overflow-x: hidden; border-radius: 0; } 
-
-  /* 2. ONE LINE LAYOUT FOR MOBILE */
+  .controls-area { 
+    width: 100%; 
+    flex-direction: column; 
+    gap: 0.8rem; 
+  }
   
+  /* Fix Search Bar expanding out of frame */
+  .search-wrapper { width: 100%; max-width: 100%; box-sizing: border-box; }
+  
+  .action-bar { width: 100%; justify-content: center; flex-wrap: wrap; }
+
+  /* 2. Content Area */
+  .content-wrapper { padding: 0; width: 100%; }
+  .table-scroll-area { 
+    overflow-x: hidden; /* Force no horizontal scroll */
+    border-radius: 0; 
+    width: 100%;
+  } 
+
+  /* 3. ROW LAYOUT - FLEXBOX SAFETY */
   thead { display: none; } 
 
   tbody tr {
@@ -301,28 +296,26 @@ footer {
     width: 100%;
     padding: 14px 10px;
     border-bottom: 1px solid var(--glass-border);
-    gap: 12px; /* Standard gap between items */
+    gap: 12px;
+    box-sizing: border-box; /* Ensure padding doesn't add to width */
   }
 
   /* Star Column */
   td:nth-child(1) {
-    width: 30px; /* Rigid width */
-    min-width: 30px; 
+    flex: 0 0 30px; /* Don't grow, don't shrink, fixed base */
+    width: 30px;
     padding: 0; 
-    flex-shrink: 0;
     display: flex; justify-content: center;
-    /* Ensure no overlap to the right */
-    margin-right: 4px; 
+    margin-right: 2px;
   }
 
-  /* Category Column (The badge) */
+  /* Category Column (Badge) */
   td:nth-child(2) {
+    flex: 0 1 auto; /* Allow shrinking */
     width: auto; 
     padding: 0;
-    flex-shrink: 0;
-    /* STRICT WIDTH CONTROL */
-    max-width: 75px; 
-    overflow: hidden; /* Cut off if too big */
+    max-width: 25%; /* Dynamic Max Width (percentage instead of pixels) */
+    overflow: hidden;
   }
   
   .category-badge {
@@ -330,32 +323,33 @@ footer {
     padding: 3px 6px;
     display: block; 
     width: 100%;
-    /* TRUNCATION RULES */
     white-space: nowrap;
     overflow: hidden; 
     text-overflow: ellipsis; 
   }
 
-  /* Service Column (Flexible) */
+  /* Service Column (Flexible Text) */
   td:nth-child(3) {
-    flex: 1; 
+    flex: 1 1 auto; /* Grow and Shrink */
     padding: 0;
-    min-width: 0; /* Critical for ellipsis to work */
+    min-width: 0; /* REQUIRED for text-overflow to work in flex child */
   }
   .service-text {
     font-size: 0.9rem;
+    /* Styles already set to truncate */
   }
 
   /* Extension Column */
   td:nth-child(4) {
+    flex: 0 0 auto; /* Don't shrink */
     width: auto; 
-    padding: 0 0 0 8px; /* Extra padding on left to separate from name */
+    padding: 0 0 0 5px; 
     text-align: right !important;
-    flex-shrink: 0;
   }
   
   .extension-pill {
     font-size: 0.85rem;
+    white-space: nowrap;
   }
 
   footer {
