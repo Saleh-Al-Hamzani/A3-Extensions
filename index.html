@@ -223,15 +223,15 @@ td {
   color: var(--text-muted);
   padding: 4px 10px; border-radius: 6px;
   font-size: 0.75rem; font-weight: 600; letter-spacing: 0.02em;
-  white-space: nowrap; /* Prevent badge from breaking */
+  white-space: nowrap; 
 }
 
 .service-text {
   font-weight: 500; color: #e2e8f0; font-size: 0.95rem;
   display: block;
-  white-space: nowrap; /* Keep text on one line */
-  overflow: hidden;    /* Cut off extra text */
-  text-overflow: ellipsis; /* Add ... */
+  white-space: nowrap; 
+  overflow: hidden;    
+  text-overflow: ellipsis; 
 }
 
 .extension-pill {
@@ -278,72 +278,71 @@ footer {
   .brand-area { width: 100%; justify-content: center; }
   .mid-section { width: 100%; }
   .controls-area { width: 100%; flex-direction: column; gap: 0.8rem; }
-  
   .search-wrapper { width: 100%; }
   .action-bar { width: 100%; justify-content: center; }
 
-  .content-wrapper { padding: 0; } /* Remove padding for edge-to-edge feel */
-  .table-scroll-area { 
-    overflow-x: hidden; 
-    border-radius: 0;
-  } 
+  .content-wrapper { padding: 0; }
+  .table-scroll-area { overflow-x: hidden; border-radius: 0; } 
 
   /* 2. ONE LINE LAYOUT FOR MOBILE */
   
-  /* Hide headers as they take too much space, or we can keep them if minimal */
   thead { display: none; } 
 
   tbody tr {
     display: flex; /* Force horizontal layout */
     align-items: center;
     width: 100%;
-    padding: 12px 10px; /* Comfortable touch target */
+    padding: 14px 10px;
     border-bottom: 1px solid var(--glass-border);
-    gap: 8px; /* Space between items */
+    gap: 12px; /* INCREASED GAP TO PREVENT OVERLAP */
   }
 
   /* Star Column */
   td:nth-child(1) {
-    width: 24px; padding: 0; 
-    flex-shrink: 0; /* Never shrink */
+    width: 30px; /* Fixed width */
+    min-width: 30px; /* Force width */
+    padding: 0; 
+    flex-shrink: 0;
     display: flex; justify-content: center;
   }
 
   /* Category Column */
   td:nth-child(2) {
-    width: auto; padding: 0;
+    width: auto; 
+    padding: 0;
     flex-shrink: 0;
+    max-width: 80px; /* Limit width */
+    display: flex; 
   }
   .category-badge {
-    font-size: 0.65rem; /* Smaller text */
+    font-size: 0.65rem; 
     padding: 3px 6px;
-    max-width: 80px; /* Limit width */
-    overflow: hidden;
-    text-overflow: ellipsis;
+    display: block;
+    overflow: hidden; text-overflow: ellipsis; /* Truncate if category name is long */
   }
 
   /* Service Column (The flexible one) */
   td:nth-child(3) {
     flex: 1; /* Take all remaining space */
     padding: 0;
-    min-width: 0; /* Crucial for text-overflow to work inside flex */
+    min-width: 0; /* Ensures truncation works */
   }
   .service-text {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
   }
 
   /* Extension Column */
   td:nth-child(4) {
-    width: auto; padding: 0;
+    width: auto; 
+    padding: 0 10px 0 10px; /* ADDED PADDING (Left/Right) */
     text-align: right !important;
     flex-shrink: 0;
   }
   
   .extension-pill {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
   }
 
-  /* Footer Adjustment */
   footer {
     flex-direction: column; gap: 10px;
     text-align: center;
